@@ -1,5 +1,6 @@
 package com.mycompany.app.pages.modals_popups;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -13,7 +14,7 @@ import com.mycompany.app.pages.BasePage;
 
 public class PersonalizeItemModal extends BasePage {
 
-    private final String iframeSelector = "#pmallmodaliframe, #personalizationView";
+    private final String iframeSelector = "#pmallmodaliframe";
 
     public PersonalizeItemModal(Page page) {
         super(page);
@@ -28,8 +29,10 @@ public class PersonalizeItemModal extends BasePage {
     private final String productImage = "#productImage";
     private final String continueButton = "input#ctl00_mainContent_addToCart_addToCartButton, button#addToCartLink[value='Continue']";
     private final String contBtn = "input#continueShoppingLink, #cmdAddonGiftBox";
-    private final String addToCartBtn = "#addToCartLink, #addToCartButton, [name='ctl00$mainContent$addToCart$addToCartButton']";
+    private final String addToCartBtn = "input[value='Add To Cart']";
     private final String noGiftBoxRadio = "label:has-text('No Gift Box')";
+
+    private final String uploadPhotoBtn = "div.uploadthumb img";
 
     private Locator getLocator(String selector) {
         if (page.locator(iframeSelector).isVisible()) {
@@ -37,6 +40,18 @@ public class PersonalizeItemModal extends BasePage {
         } else {
             return page.locator(selector);
         }
+    }
+
+    public void uploadPhoto(String filePath) {
+        getLocator(uploadPhotoBtn).click();
+        getLocator("#hFinderUploadFile").setInputFiles(Paths.get(filePath));
+        
+        Locator canvas = getLocator("canvas#previewCanvas");
+        canvas.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        
+        Locator saveCropBtn = getLocator("a#saveCrop");
+        saveCropBtn.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        saveCropBtn.click();
     }
 
     public void fillInputByLabel(String labelText, String value) {

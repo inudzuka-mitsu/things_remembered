@@ -15,7 +15,7 @@ public class HomePage extends BasePage {
 
     // --- DESKTOP APP LOCATORS ---
     private final String searchBar = "input#searchBox";
-    private final String viewCartButton = "";
+    private final String viewCartButton = "div.right.fl a[href*='Cart.aspx']";
     private final String checkoutBtn = "";
     private final String addedToCartHeader = "";
     private final String personalizationDetails = "";

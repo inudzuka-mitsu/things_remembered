@@ -11,8 +11,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import com.mycompany.app.base.TestBase;
 import com.mycompany.app.pages.login.StagingLoginPage;
 
-// REMOVE LATER: WORKS FOR BOTH WEBSITES
-
+// Works for TR Desktop
 
 public class CookieBannerCaliTests extends TestBase {
 

@@ -13,7 +13,7 @@ import com.mycompany.app.pages.HomePage;
 import com.mycompany.app.pages.ProductCatalogPage;
 import com.mycompany.app.pages.login.StagingLoginPage;
 
-// REMOVE LATER: WORKS FOR BOTH WEBSITES
+// Works for TR Desktop
 
 public class SdestTests extends TestBase {
 

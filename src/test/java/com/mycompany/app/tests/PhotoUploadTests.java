@@ -5,17 +5,17 @@ import org.junit.jupiter.api.Test;
 import com.mycompany.app.base.TestBase;
 import com.mycompany.app.pages.CartPage;
 import com.mycompany.app.pages.HomePage;
-import com.mycompany.app.pages.PhotoEditorPage;
 import com.mycompany.app.pages.ProductPage;
 import com.mycompany.app.pages.login.StagingLoginPage;
+import com.mycompany.app.pages.modals_popups.PersonalizeItemModal;
 
-// This test is configured for desktop app, iPhone 13 Pro Max, Samsung Galaxy A52
+// Works for TR Desktop
 
 public class PhotoUploadTests extends TestBase {
 
     private StagingLoginPage stagingLoginPage;
     private ProductPage productPage;
-    private PhotoEditorPage photoEditorPage;
+    private PersonalizeItemModal personalizeModal;
     private HomePage homePage;
     private CartPage cartPage;
 
@@ -24,11 +24,11 @@ public class PhotoUploadTests extends TestBase {
 
         stagingLoginPage = new StagingLoginPage(page);
         productPage = new ProductPage(page, isMobile());
-        photoEditorPage = new PhotoEditorPage(page, isMobile());
         homePage = new HomePage(page, isMobile());
         cartPage = new CartPage(page, isMobile());
+        personalizeModal = new PersonalizeItemModal(page);
 
-        String PRODUCT_URL = getProperty("baseUrl") + "/Family-Photo-Personalized-Coffee-Mugs-p25561.prod?sdest=dept&sdestid=2115&storeid=34&categoryid=2115";
+        String PRODUCT_URL = getProperty("baseUrl") + "/Custom-Photo-Golf-Towel-i68313.item?productid=25113&sdest=Search&sdestid=181406962";
         String photoPath = System.getProperty("user.dir") + "/src/test/resources/lake.jpg";
 
          String env = System.getProperty("env", "stg");
@@ -42,21 +42,12 @@ public class PhotoUploadTests extends TestBase {
 
         page.navigate(PRODUCT_URL);
         productPage.clickPersonalizeBtn();
-
-        photoEditorPage.clickAddPhotoLater();
-        if (!isMobile()) { photoEditorPage.clickDesignTab();}
-        photoEditorPage.selectCategory("Anniversary");
-        photoEditorPage.selectFirstLibraryMessage();
-        photoEditorPage.clickPhotoTab();
-        photoEditorPage.uploadPhoto(photoPath);
-        photoEditorPage.clickPhotoTab();
-        photoEditorPage.dragPhotoToSlot();
-        photoEditorPage.verifyPhotoAssignedToSlot();
-        photoEditorPage.clickAddToCart();
-        photoEditorPage.clickContinue();
+        personalizeModal.uploadPhoto(photoPath);
+        personalizeModal.checkPersonalizationCorrect();
+        personalizeModal.clickAddToCart();
 
         homePage.clickViewCart();
-        cartPage.validateProductInCart("Family Photo Personalized Coffee Mug");
+        cartPage.validateProductInCart("Personalized Photo Golf Towel");
     }
 
 }
