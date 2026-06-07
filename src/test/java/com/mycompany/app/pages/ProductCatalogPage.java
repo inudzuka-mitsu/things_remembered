@@ -15,15 +15,15 @@ public class ProductCatalogPage extends BasePage {
        this.isMobile = isMobile;
     }
 
-    String itemDescription = "";
-    String itemImage = "";
-    String currentSelectionItem = "";
+    String itemDescription = "update";
+    String itemImage = "update";
+    String currentSelectionItem = "div.search-terms";
     String productLink = "div.search-item .thumbProduct a";
 
     // MOBILE APP LOCATORS 
 
-    String mobileItemDescription = "";
-    String mobileItemImage = "";
+    String mobileItemDescription = "update";
+    String mobileItemImage = "update";
 
 
     public void validateCurrentSelection(String searchQuery) {

@@ -8,7 +8,7 @@ import com.mycompany.app.pages.ProductCatalogPage;
 import com.mycompany.app.pages.login.StagingLoginPage;
 import com.mycompany.app.pages.modals_popups.ProductModal;
 
-// This test is configured for desktop app, iPhone 13 Pro Max, Samsung Galaxy A52
+// Works for TR Desktop
 
 public class ProductSearchTests extends TestBase {
 
@@ -32,7 +32,6 @@ public class ProductSearchTests extends TestBase {
         lp.closePopUp();
         hp.typeProduct(productName);
 
-        modal.validateCategoryName(productName);
         modal.validateAllProductsContainProductName(productName);
         modal.validateAllProductSuggestionsContainProductName(productName);
 

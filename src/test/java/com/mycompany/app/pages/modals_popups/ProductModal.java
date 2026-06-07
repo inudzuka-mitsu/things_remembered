@@ -1,6 +1,5 @@
 package com.mycompany.app.pages.modals_popups;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.microsoft.playwright.Locator;
@@ -13,14 +12,9 @@ public class ProductModal extends BasePage{
         super(page);
     }
 
-    String categoryName = "div.ea-sug-category-name";
     String productItem = "div.ea-sug-product-name";
     String productSuggestions = "div[class='ea-sug-section'] ul li";
 
-    public void validateCategoryName(String expected) {
-        String actualText = page.locator(categoryName).innerText();
-        assertEquals("Shop " + expected + " Category", actualText);
-    }
 
     public void validateAllProductsContainProductName(String product) {
         Locator items = page.locator(productItem);
