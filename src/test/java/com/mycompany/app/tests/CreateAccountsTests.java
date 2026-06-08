@@ -2,7 +2,6 @@ package com.mycompany.app.tests;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitUntilState;
@@ -14,7 +13,7 @@ import com.mycompany.app.pages.login.SignInPage;
 import com.mycompany.app.pages.modals_popups.AddressModal;
 import com.mycompany.app.pages.modals_popups.Header;
 
-// These tests are configured for desktop app, iPhone 13 Pro Max, Samsung Galaxy A52
+// These tests are configured for TR desktop app (stg and prod), iPhone 13 Pro Max, Samsung Galaxy A52 
 
 public class CreateAccountsTests extends TestBase {
 
@@ -26,7 +25,6 @@ public class CreateAccountsTests extends TestBase {
     private Header header;
 
     @Test
-    //@DisabledIfSystemProperty(named = "env", matches = "prod")
     @DisplayName("Verify user can checkout as a guest")
     void createGuestAccount() {
 
@@ -53,13 +51,7 @@ public class CreateAccountsTests extends TestBase {
                          city + ", " + state + " " + zipCode + " " + 
                          phoneNumber;
 
-        String env = System.getProperty("env", "stg");
-        
-        if ("prod".equalsIgnoreCase(env)) {
-            page.navigate(getProperty("baseUrl"));
-        } else {
-            page.navigate(getProperty("stagingBaseUrl"));
-        }
+        page.navigate(getProperty("baseUrl"));
     
         page.navigate(getProperty("baseUrl") + "/Register.aspx?");
 
@@ -82,7 +74,6 @@ public class CreateAccountsTests extends TestBase {
     }
 
     @Test
-    @DisabledIfSystemProperty(named = "env", matches = "prod")
     @DisplayName("Verify user can create a new account")
     void createNewAccount() {
 
@@ -110,7 +101,7 @@ public class CreateAccountsTests extends TestBase {
                          city + ", " + state + " " + zipCode + " " + 
                          phoneNumber;
 
-        page.navigate(getProperty("stagingBaseUrl"), 
+        page.navigate(getProperty("baseUrl"), 
             new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
     
         page.navigate(getProperty("baseUrl") + "/Register.aspx?");

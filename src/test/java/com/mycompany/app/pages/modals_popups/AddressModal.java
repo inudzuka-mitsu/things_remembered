@@ -18,7 +18,7 @@ public class AddressModal extends BasePage {
     
     private final String shipToAddressBtn = "input[value='Ship To This Address'], button:has-text('Ship To This Address')";
     
-    private final String saveAndContinueBtn = "input#ctl00_belowHeader_saveContinueBtn"; 
+    private final String saveAndContinueBtn = "input#ctl00_belowHeader_saveContinueBtn, button#ctl00_belowHeader_saveContinueBtn"; 
     
     private final String addressTextLocator = ".cstAddress, .adressbook-address";
     private final String addressCardContainer = ".itembox, .box__address-block";

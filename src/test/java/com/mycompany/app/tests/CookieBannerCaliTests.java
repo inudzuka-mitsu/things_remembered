@@ -11,7 +11,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import com.mycompany.app.base.TestBase;
 import com.mycompany.app.pages.login.StagingLoginPage;
 
-// Works for TR Desktop
+// This test is configured for TR desktop app (stg and prod), iPhone 13 Pro Max, Samsung Galaxy A52
 
 public class CookieBannerCaliTests extends TestBase {
 
@@ -46,14 +46,8 @@ public class CookieBannerCaliTests extends TestBase {
                 .setContentType("application/json")
             );
         });
-
-        String env = System.getProperty("env", "stg");
         
-        if ("prod".equalsIgnoreCase(env)) {
-            page.navigate(getProperty("baseUrl"));
-        } else {
-            page.navigate(getProperty("stagingBaseUrl"));
-        }
+        page.navigate(getProperty("baseUrl"));
 
         StagingLoginPage loginPage = new StagingLoginPage(page);
         loginPage.closePopUp();
