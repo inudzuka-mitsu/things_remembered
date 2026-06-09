@@ -8,7 +8,7 @@ import com.mycompany.app.pages.ProductCatalogPage;
 import com.mycompany.app.pages.login.StagingLoginPage;
 import com.mycompany.app.pages.modals_popups.ProductModal;
 
-// Works for TR Desktop
+// This test is configured for TR desktop app (stg and prod), iPhone 13 Pro Max, Samsung Galaxy A52
 
 public class ProductSearchTests extends TestBase {
 
@@ -22,13 +22,8 @@ public class ProductSearchTests extends TestBase {
 
         String productName = "Socks";
 
-        String env = System.getProperty("env", "stg");
+        page.navigate(getProperty("baseUrl"));
         
-        if ("prod".equalsIgnoreCase(env)) {
-            page.navigate(getProperty("baseUrl"));
-        } else {
-            page.navigate(getProperty("stagingBaseUrl"));
-        }
         lp.closePopUp();
         hp.typeProduct(productName);
 
