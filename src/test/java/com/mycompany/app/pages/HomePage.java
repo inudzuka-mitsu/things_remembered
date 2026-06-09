@@ -22,8 +22,8 @@ public class HomePage extends BasePage {
     private final String forHerNavLink = ".shop-recipients-list a:text-is('For Her')";
 
     // --- MOBILE APP LOCATORS ---
-    private final String mobileSearchBar = "";
-    private final String mobileForHerLink = "";
+    private final String mobileSearchBar = "input#searchString";
+    private final String mobileForHerLink = ".footer__nav-links a:has-text('For Her')";
     private final String mobileAddedToCartHeader = "";
     private final String mobilePersonalizationDetails = "";
     private final String mobileViewCartButton = "";

@@ -23,7 +23,7 @@ public class ProductCatalogPage extends BasePage {
     // MOBILE APP LOCATORS 
 
     String mobileItemDescription = "update";
-    String mobileItemImage = "update";
+    String mobileItemImage = "div.category_item img.CAT_IMAGE";
 
 
     public void validateCurrentSelection(String searchQuery) {

@@ -13,7 +13,7 @@ import com.mycompany.app.pages.HomePage;
 import com.mycompany.app.pages.ProductCatalogPage;
 import com.mycompany.app.pages.login.StagingLoginPage;
 
-// Works for TR Desktop
+// These tests are configured for TR desktop app (stg and prod), iPhone 13 Pro Max, Samsung Galaxy A52 
 
 public class SdestTests extends TestBase {
 
@@ -30,10 +30,9 @@ public class SdestTests extends TestBase {
         forHerPage = new ForHerPage(page, isMobile());
         pcp = new ProductCatalogPage(page, isMobile());
 
-        String env = System.getProperty("env", "stg");
-        String baseUrl = "prod".equalsIgnoreCase(env) ? getProperty("baseUrl") : getProperty("stagingBaseUrl");
+        page.navigate(getProperty("baseUrl"));
 
-        page.navigate(baseUrl, new com.microsoft.playwright.Page.NavigateOptions()
+        page.navigate(getProperty("baseUrl"), new com.microsoft.playwright.Page.NavigateOptions()
             .setWaitUntil(com.microsoft.playwright.options.WaitUntilState.DOMCONTENTLOADED));
         
         stagingLoginPage.closePopUp();

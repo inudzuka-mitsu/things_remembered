@@ -11,11 +11,9 @@ public class ForHerPage extends BasePage {
         this.isMobile = isMobile;
     }
 
-    // DESKTOP APP LOCATORS
+    // DESKTOP & MOBILE APP LOCATORS
 
-    private final String productLinks = ".thumbProduct a.prod_url.carousel_new";
-
-    // MOBILE APP LOCATORS
+    private final String productLinks = ".thumbProduct a.prod_url.carousel_new, div.prod-thumb-img";
 
 
     public void clickCategory(String categoryName) {
