@@ -13,15 +13,17 @@ public class AddAddressPage extends BasePage {
     }
 
     // --- DESKTOP LOCATORS ---
-    private final String nicknameInput = "#ctl00_belowHeader_viewAddressBookControl_txtName";
-    private final String firstNameInput = "#ctl00_belowHeader_viewAddressBookControl_txtFirstName";
-    private final String lastNameInput = "#ctl00_belowHeader_viewAddressBookControl_txtLastName";
-    private final String phoneInput = "#ctl00_belowHeader_viewAddressBookControl_txtPhone";
-    private final String addressInput = "#ctl00_belowHeader_viewAddressBookControl_txtAddress1";
-    private final String cityInput = "#ctl00_belowHeader_viewAddressBookControl_txtCity";
-    private final String stateDropdown = "#ctl00_belowHeader_viewAddressBookControl_txtState";
-    private final String zipInput = "#ctl00_belowHeader_viewAddressBookControl_txtZip";
+    // Updated to reflect the 'mainContent' naming convention found in the DOM
+    private final String nicknameInput = "#ctl00_mainContent_viewAddressBookControl_txtName";
+    private final String firstNameInput = "#ctl00_mainContent_viewAddressBookControl_txtFirstName";
+    private final String lastNameInput = "#ctl00_mainContent_viewAddressBookControl_txtLastName";
+    private final String phoneInput = "#ctl00_mainContent_viewAddressBookControl_txtPhone";
+    private final String addressInput = "#ctl00_mainContent_viewAddressBookControl_txtAddress1";
+    private final String cityInput = "#ctl00_mainContent_viewAddressBookControl_txtCity";
+    private final String stateDropdown = "#ctl00_mainContent_viewAddressBookControl_txtState";
+    private final String zipInput = "#ctl00_mainContent_viewAddressBookControl_txtZip";
     private final String addAddressBtn = "#cmdAddAddress";
+    
     private final String saveAddress = "#cmdSaveAddress";
     private final String confirmCheckbox = "input#checkConfirm";
     private final String useThisAddressBtn = "input#cmdUseThisAddress";
@@ -37,7 +39,7 @@ public class AddAddressPage extends BasePage {
     private final String mCityInput = "#CustomerTempAddress_CustomerCity";
     private final String mStateDropdown = "#CustomerTempAddress_CustomerState";
     private final String mZipInput = "#CustomerTempAddress_CustomerZip";
-    private final String mSaveAddress = ".wrapper__btn-bottom input[value*='Save']";
+    private final String mSaveAddress = ".wrapper__btn-bottom input[value*='Save'], input[value='Add New Shipping Address']";
     private final String mConfirmCheckbox = "#ConfirmAddress";
     private final String mUseThisAddressBtn = "#confirmAddrSubmit";
 
@@ -101,5 +103,9 @@ public class AddAddressPage extends BasePage {
         Locator zipLoc = getDynamicLocator(zipInput, mZipInput);
         zipLoc.clear();
         zipLoc.fill(zip);
+
+        if (isMobile) {
+            zipLoc.press("Tab"); 
+        }
     }
 }

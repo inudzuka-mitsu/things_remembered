@@ -14,8 +14,6 @@ import com.mycompany.app.pages.BasePage;
 
 public class PersonalizeItemModal extends BasePage {
 
-    private final String iframeSelector = "#pmallmodaliframe";
-
     public PersonalizeItemModal(Page page) {
         super(page);
     }
@@ -32,24 +30,62 @@ public class PersonalizeItemModal extends BasePage {
     private final String addToCartBtn = "input[value='Add To Cart']";
     private final String noGiftBoxRadio = "label:has-text('No Gift Box')";
 
-    private final String uploadPhotoBtn = "div.uploadthumb img";
+    private final String uploadPhotoBtn = "div.uploadthumb img, div.uploadthumbnail img";
 
     private Locator getLocator(String selector) {
-        if (page.locator(iframeSelector).isVisible()) {
-            return page.frameLocator(iframeSelector).locator(selector);
-        } else {
+        if (page.locator("#pmallmodaliframe").count() > 0) {
+            return page.frameLocator("#pmallmodaliframe").locator(selector);
+        } 
+        else if (page.locator("iframe#personalizationView").count() > 0) {
+            return page.frameLocator("iframe#personalizationView").locator(selector);
+        } 
+        else {
             return page.locator(selector);
         }
     }
 
-    public void uploadPhoto(String filePath) {
-        getLocator(uploadPhotoBtn).click();
-        getLocator("#hFinderUploadFile").setInputFiles(Paths.get(filePath));
+    private Locator getModalElement(String selector) {
+        // Poll for the element to appear in ANY context (Main Page, Mobile Frame, or Desktop Frame)
+        for (int i = 0; i < 30; i++) { // Polls for up to 15 seconds
+            
+            // 1. Check Main Page (Typical for mobile modal breakouts)
+            if (page.locator(selector).count() > 0) {
+                return page.locator(selector);
+            }
+            
+            // 2. Check Mobile Frame
+            if (page.locator("#personalizationView").count() > 0 && 
+                page.frameLocator("#personalizationView").locator(selector).count() > 0) {
+                return page.frameLocator("#personalizationView").locator(selector);
+            }
+            
+            // 3. Check Desktop Frame
+            if (page.locator("#pmallmodaliframe").count() > 0 && 
+                page.frameLocator("#pmallmodaliframe").locator(selector).count() > 0) {
+                return page.frameLocator("#pmallmodaliframe").locator(selector);
+            }
+            
+            page.waitForTimeout(500); // wait half a second before trying again
+        }
         
-        Locator canvas = getLocator("canvas#previewCanvas");
+        // Fallback to let Playwright handle the timeout natively if it never appears
+        return page.locator(selector);
+    }
+
+    public void uploadPhoto(String filePath) {
+        // 1. Click the thumbnail using your standard locator (since you confirmed this works)
+        getLocator(uploadPhotoBtn).click();
+        
+        // 2. The crop UI might be injected into the main page OR stay in the iframe.
+        // Use the polling locator to find exactly where it rendered.
+        Locator fileInput = getModalElement("#hFinderUploadFile");
+        fileInput.setInputFiles(Paths.get(filePath));
+        
+        // 3. Find the canvas and save button dynamically
+        Locator canvas = getModalElement("canvas#previewCanvas");
         canvas.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         
-        Locator saveCropBtn = getLocator("a#saveCrop");
+        Locator saveCropBtn = getModalElement("a#saveCrop");
         saveCropBtn.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         saveCropBtn.click();
     }

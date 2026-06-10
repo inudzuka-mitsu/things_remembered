@@ -22,9 +22,9 @@ public class AddressModal extends BasePage {
     
     private final String addressTextLocator = ".cstAddress, .adressbook-address";
     private final String addressCardContainer = ".itembox, .box__address-block";
-    private final String addNewAddressBtn = "#ctl00_belowHeader_viewAddressBookControl_btn_addnewaddress, button#newAddressSubmit";
+    private final String addNewAddressBtn = "#ctl00_belowHeader_viewAddressBookControl_btn_addnewaddress, button#newAddressSubmit, button#ctl00_mainContent_viewAddressBookControl_btn_addnewaddress";
 
-    // --- ACTIONS ---
+    // --- ACTIONS --- 
 
     public void selectFirstAddressAndShip() {
         page.locator(shipToAddressBtn).first().click(new Locator.ClickOptions().setForce(true));

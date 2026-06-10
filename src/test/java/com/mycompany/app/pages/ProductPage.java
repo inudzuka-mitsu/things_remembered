@@ -14,7 +14,7 @@ public class ProductPage extends BasePage {
     }
 
     // --- UNIFIED LOCATORS ---
-    private final String mainActionBtn = "#btnPersonalize";
+    private final String mainActionBtn = "#btnPersonalize, .div_add_to_cart a";
     
     private final String handleColorDropdown = "#option-select-container select";
 
