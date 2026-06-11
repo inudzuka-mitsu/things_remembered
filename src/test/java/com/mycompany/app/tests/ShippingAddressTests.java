@@ -9,7 +9,7 @@ import com.mycompany.app.pages.AddAddressPage;
 import com.mycompany.app.pages.login.SignInPage;
 import com.mycompany.app.pages.modals_popups.AddressModal;
 
-// These tests are configured for TR desktop app (stg and prod), possibly a bug on mobile
+// These tests are configured for TR desktop app (stg and prod), BUG ON MOBILE - STATE IS NOT VISIBLE 
 
 public class ShippingAddressTests extends TestBase {
     
