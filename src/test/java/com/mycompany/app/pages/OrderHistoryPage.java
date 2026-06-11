@@ -13,9 +13,9 @@ public class OrderHistoryPage extends BasePage {
 
     // --- DESKTOP APP LOCATORS ---
     private final String viewDetailsButton = ".content__wrapper .content-right-col a.base__btn";
-    private final String reorderBtn = ".btn_wrapper .reorderItem";
-    private final String reportIssueBtn = ".btn_wrapper a:text-is('REPORT ISSUE')";
-    private final String writeReviewBtn = ".btn_wrapper a:text-is('WRITE A REVIEW')";
+    private final String reorderBtn = ".btn_wrapper .reorderItem, div.btn_wrapper a[data-action='reorderitem']";
+    private final String reportIssueBtn = ".btn_wrapper a:text-is('REPORT ISSUE'), a:has-text('Report Issue')";
+    private final String writeReviewBtn = ".btn_wrapper a:text-is('WRITE A REVIEW'), a:has-text('Write a Review')";
 
     private final String productContainer = "td.cart-item-content";
     private final String itemNameLoc = productContainer + " > div:nth-child(1) > b:nth-child(1)";

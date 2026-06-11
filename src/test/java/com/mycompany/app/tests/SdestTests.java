@@ -38,8 +38,6 @@ public class SdestTests extends TestBase {
         stagingLoginPage.closePopUp();
     }
 
-    // DOUBLE CHECK IF THE URL MATCHING IS CORRECT (JIBEK TO ASK AT WORK)
-
     @Test
     @DisplayName("Validate URL parameters when navigating via 'For Her' category")
     void verifyForHerProductUrlParameters() {
@@ -49,8 +47,6 @@ public class SdestTests extends TestBase {
 
         assertThat(page).hasURL(Pattern.compile(".*sdest=.*&sdestid=."));
     }
-
-    // DOUBLE CHECK IF THE URL MATCHING IS CORRECT (JIBEK TO ASK AT WORK)
 
     @Test
     @DisplayName("Validate URL parameters when navigating via Search Results")

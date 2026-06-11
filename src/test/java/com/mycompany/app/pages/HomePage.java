@@ -26,7 +26,7 @@ public class HomePage extends BasePage {
     private final String mobileForHerLink = ".footer__nav-links a:has-text('For Her')";
     private final String mobileAddedToCartHeader = "";
     private final String mobilePersonalizationDetails = "";
-    private final String mobileViewCartButton = "";
+    private final String mobileViewCartButton = "input[value='View Cart >']";
     private final String mobileCheckoutBtn = "";
 
     public void typeProduct(String productName) {
