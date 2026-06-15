@@ -251,26 +251,21 @@ public class CartPage extends BasePage {
     public void clickSaveForLaterSpecProd(String productName) {
         System.out.println(">>> Clicking 'Save for later' specifically for: " + productName);
         
-        // 1. Create a safe partial text to bypass any HTML encoding (& vs &amp;) quirks
         String safeName = productName;
         if (productName.contains("&")) {
             safeName = productName.split("&")[0].trim(); 
         }
         
-        // 2. Wait for the block to be visible, increasing the timeout to 15 seconds 
-        // to survive heavy ASP.NET reloads on the cart page.
         Locator itemBlock = page.locator(".block__shopping-cart")
                                 .filter(new Locator.FilterOptions().setHasText(safeName))
                                 .first();
                                 
         itemBlock.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(15000));
         
-        // 3. Locate and click the button
         Locator saveBtn = itemBlock.locator("a:has-text('Save for later')").first();
         saveBtn.scrollIntoViewIfNeeded();
         saveBtn.click(new Locator.ClickOptions().setForce(true));
         
-        // 4. Give the page time to complete the ASP.NET postback after clicking
         page.waitForTimeout(3000);
     }
 
