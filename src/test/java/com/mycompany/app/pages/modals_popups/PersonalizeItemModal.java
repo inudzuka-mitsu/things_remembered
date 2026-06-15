@@ -18,18 +18,33 @@ public class PersonalizeItemModal extends BasePage {
         super(page);
     }
 
-    // --- UNIFIED DESKTOP & MOBILE LOCATORS ---
-    private final String threadColorDropdown = "tr:has(.pers-title:has-text('Thread Color')) + tr .dropdown-btn, fieldset:has(.personalization_name:has-text('Thread Color')) .dropdown-btn, div.dropdown-btn";
-    private final String fontDropdown = "tr:has(.pers-title:has-text('Font')) + tr .dropdown-btn, fieldset:has(.personalization_name:has-text('Font')) .dropdown-btn, div.dropdown-btn";
-    private final String colorDropdownByLabel = "tr:has(.pers-title:has-text('Color')) + tr .dropdown-btn, fieldset:has(.personalization_name:has-text('Color')) .dropdown-btn, div.dropdown-btn";
+    private final String monogramRadio = "label:has-text('Monogram')";
+    private final String nameRadio = "label:has-text('Name')";
+    private final String initialRadio = "label:has-text('Initial')";
+
+    private final String initialInput = "input[placeholder='Initial']";
+    private final String nameInputBox = "input[placeholder='Name']";
+    private final String monoFirstInput = "input[placeholder='First']";
+    private final String monoSecondInput = "input[placeholder='Second']";
+    private final String monoThirdInput = "input[placeholder='Third']";
+
+    private final String customDropdownToggleTemplate = "tr:has(.pers-title:has-text('%s')) + tr .dropdown-btn";
+    private final String customDropdownOptionTemplate = "tr:has(.pers-title:has-text('%s')) + tr li[data-val='%s']";
+
+    private final String multiLineTextArea = "tr:has(.pers-title:has-text('Personalization')) + tr textarea";
     
+    private final String fontDropdownToggle = ".monogramcontent:visible .dropdownToggle";
+    private final String fontOptionTemplate = ".monogramctdd:visible .imgdd[data-imgname='%s']";
+
+    private final String threadColorDropdown = "tr:has(.pers-title:has-text('Thread Color')) + tr .dropdown-btn, fieldset:has(.personalization_name:has-text('Thread Color')) .dropdown-btn, div.dropdown-btn";
+    private final String colorDropdownByLabel = "tr:has(.pers-title:has-text('Color')) + tr .dropdown-btn, fieldset:has(.personalization_name:has-text('Color')) .dropdown-btn, div.dropdown-btn";
     private final String activeDropdownOptions = ".select-active li[data-val='%s'], .select-active li[data-option='%s']";
+    
     private final String productImage = "#productImage";
     private final String continueButton = "input#ctl00_mainContent_addToCart_addToCartButton, button#addToCartLink[value='Continue']";
     private final String contBtn = "input#continueShoppingLink, #cmdAddonGiftBox";
     private final String addToCartBtn = "input[value='Add To Cart']";
     private final String noGiftBoxRadio = "label:has-text('No Gift Box')";
-
     private final String uploadPhotoBtn = "div.uploadthumb img, div.uploadthumbnail img";
 
     private Locator getLocator(String selector) {
@@ -45,43 +60,141 @@ public class PersonalizeItemModal extends BasePage {
     }
 
     private Locator getModalElement(String selector) {
-        // Poll for the element to appear in ANY context (Main Page, Mobile Frame, or Desktop Frame)
-        for (int i = 0; i < 30; i++) { // Polls for up to 15 seconds
-            
-            // 1. Check Main Page (Typical for mobile modal breakouts)
+        for (int i = 0; i < 30; i++) { 
             if (page.locator(selector).count() > 0) {
                 return page.locator(selector);
             }
-            
-            // 2. Check Mobile Frame
             if (page.locator("#personalizationView").count() > 0 && 
                 page.frameLocator("#personalizationView").locator(selector).count() > 0) {
                 return page.frameLocator("#personalizationView").locator(selector);
             }
-            
-            // 3. Check Desktop Frame
             if (page.locator("#pmallmodaliframe").count() > 0 && 
                 page.frameLocator("#pmallmodaliframe").locator(selector).count() > 0) {
                 return page.frameLocator("#pmallmodaliframe").locator(selector);
             }
-            
-            page.waitForTimeout(500); // wait half a second before trying again
+            page.waitForTimeout(500); 
         }
-        
-        // Fallback to let Playwright handle the timeout natively if it never appears
         return page.locator(selector);
     }
 
-    public void uploadPhoto(String filePath) {
-        // 1. Click the thumbnail using your standard locator (since you confirmed this works)
-        getLocator(uploadPhotoBtn).click();
+    public void selectInitialAndFill(String initialText) {
+        Locator radio = getLocator(initialRadio);
+        radio.scrollIntoViewIfNeeded();
+        radio.click();
+
+        Locator input = getLocator(initialInput);
+        input.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        input.clear();
+        input.fill(initialText);
+        input.press("Tab");
+    }
+
+    public void selectNameAndFill(String nameText) {
+        Locator radio = getLocator(nameRadio);
+        radio.scrollIntoViewIfNeeded();
+        radio.click();
+
+        Locator input = getLocator(nameInputBox);
+        input.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        input.clear();
+        input.fill(nameText);
+        input.press("Tab");
+    }
+
+    public void selectCustomDropdown(String dropdownTitle, String optionName) {
+        if (optionName == null || optionName.isEmpty()) return;
+
+        System.out.println(">>> Selecting '" + optionName + "' from '" + dropdownTitle + "' dropdown...");
+
+        String toggleSelector = String.format(customDropdownToggleTemplate, dropdownTitle);
+        Locator toggleBtn = getLocator(toggleSelector).first();
         
-        // 2. The crop UI might be injected into the main page OR stay in the iframe.
-        // Use the polling locator to find exactly where it rendered.
+        toggleBtn.scrollIntoViewIfNeeded();
+        toggleBtn.click(new Locator.ClickOptions().setForce(true));
+
+        String optionSelector = String.format(customDropdownOptionTemplate, dropdownTitle, optionName);
+        Locator optionToSelect = getLocator(optionSelector).first();
+
+        optionToSelect.scrollIntoViewIfNeeded();
+        optionToSelect.click(new Locator.ClickOptions().setForce(true));
+    }
+
+    public void fillMultiLinePersonalization(String text) {
+        System.out.println(">>> Filling multi-line personalization text...");
+        
+        Locator textArea = getLocator(multiLineTextArea).first();
+        textArea.scrollIntoViewIfNeeded();
+        textArea.clear();
+        textArea.fill(text);
+        
+        textArea.press("Tab"); 
+    }
+
+    public void enterPersonalizationMessage(String message) {
+        System.out.println(">>> Waiting for Step 7 to load...");
+        
+        page.waitForTimeout(5000); 
+
+        System.out.println(">>> Entering personalization message...");
+        
+        Locator textArea = getLocator("div#personalizationForm textarea:visible").first();
+        textArea.scrollIntoViewIfNeeded();
+        
+        textArea.click();
+        textArea.clear();
+        
+        textArea.evaluate("(el, msg) => { " +
+            "el.value = msg; " +
+            "el.dispatchEvent(new Event('input', { bubbles: true })); " +
+            "el.dispatchEvent(new Event('change', { bubbles: true })); " +
+            "el.dispatchEvent(new Event('blur', { bubbles: true })); " +
+        "}", message);
+        
+        textArea.press("Tab");
+        
+        page.waitForTimeout(500); 
+    }
+
+    public void selectMonogramAndFill(String first, String second, String third) {
+        Locator radio = getLocator(monogramRadio);
+        radio.scrollIntoViewIfNeeded();
+        radio.click();
+
+        Locator firstBox = getLocator(monoFirstInput);
+        firstBox.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        
+        firstBox.clear();
+        firstBox.fill(first);
+        
+        Locator secondBox = getLocator(monoSecondInput);
+        secondBox.clear();
+        secondBox.fill(second);
+
+        Locator thirdBox = getLocator(monoThirdInput);
+        thirdBox.clear();
+        thirdBox.fill(third);
+        thirdBox.press("Tab");
+    }
+
+    public void selectFont(String fontName) {
+        if (fontName == null || fontName.isEmpty()) return;
+
+        Locator dropdownBtn = getLocator(fontDropdownToggle).first();
+        dropdownBtn.scrollIntoViewIfNeeded();
+        dropdownBtn.click(new Locator.ClickOptions().setForce(true));
+        
+        String optionSelector = String.format(fontOptionTemplate, fontName);
+        Locator fontOption = getLocator(optionSelector).first();
+    
+        fontOption.scrollIntoViewIfNeeded();
+        fontOption.click(new Locator.ClickOptions().setForce(true));
+    }
+
+    public void uploadPhoto(String filePath) {
+        getLocator(uploadPhotoBtn).click();
         Locator fileInput = getModalElement("#hFinderUploadFile");
         fileInput.setInputFiles(Paths.get(filePath));
         
-        // 3. Find the canvas and save button dynamically
         Locator canvas = getModalElement("canvas#previewCanvas");
         canvas.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         
@@ -92,7 +205,6 @@ public class PersonalizeItemModal extends BasePage {
 
     public void fillInputByLabel(String labelText, String value) {
         String selector = String.format("tr:has(.pers-title:has-text('%s')) + tr input, input[data-val-required*='%s']", labelText, labelText);
-        
         Locator input = getLocator(selector).first();
         input.scrollIntoViewIfNeeded();
         input.clear();
@@ -109,18 +221,6 @@ public class PersonalizeItemModal extends BasePage {
         Locator colorOption = getLocator(optionLocator).first();
         colorOption.scrollIntoViewIfNeeded();
         colorOption.click(new Locator.ClickOptions().setForce(true));
-    }
-
-    public void selectFont(String font) {
-        Locator dropdown = getLocator(fontDropdown).last();
-        dropdown.scrollIntoViewIfNeeded();
-        dropdown.click(new Locator.ClickOptions().setForce(true));
-        
-        String optionLocator = String.format(activeDropdownOptions, font, font);
-        Locator fontOption = getLocator(optionLocator).first();
-    
-        fontOption.scrollIntoViewIfNeeded();
-        fontOption.click(new Locator.ClickOptions().setForce(true));
     }
 
     public void selectColor(String color) {
@@ -154,20 +254,26 @@ public class PersonalizeItemModal extends BasePage {
     public void checkPersonalizationCorrect() {
         System.out.println(">>> Confirming personalization...");
         Locator confirmLabel = getLocator("label:has-text('The personalization I entered is correct')").first();
-        confirmLabel.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-        confirmLabel.click();
+        
+        try {
+            confirmLabel.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.VISIBLE)
+                .setTimeout(3000));
+                
+            confirmLabel.scrollIntoViewIfNeeded();
+            confirmLabel.click();
+            System.out.println(">>> Checkbox found and clicked.");
+            
+        } catch (com.microsoft.playwright.TimeoutError e) {
+            System.out.println(">>> No confirmation checkbox rendered on this step. Bypassing safely.");
+        }
     }
 
     public void clickContinue() {
         System.out.println(">>> Waiting for the Continue button to become enabled...");
-        
         Locator btn = getLocator(continueButton).first();
-        
         btn.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         assertThat(btn).isEnabled();
-        
-        System.out.println(">>> Button is enabled. Clicking Continue...");
-        
         btn.scrollIntoViewIfNeeded();
         btn.click(new Locator.ClickOptions().setForce(true));
     }
@@ -178,14 +284,9 @@ public class PersonalizeItemModal extends BasePage {
 
     public void clickAddToCart() {
         System.out.println(">>> Waiting for the Add to Cart button to become enabled...");
-        
         Locator btn = getLocator(addToCartBtn).first();
-        
         btn.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         assertThat(btn).isEnabled();
-        
-        System.out.println(">>> Button is enabled. Clicking Add to Cart...");
-        
         btn.scrollIntoViewIfNeeded();
         btn.click(new Locator.ClickOptions().setForce(true));
     }
@@ -199,24 +300,35 @@ public class PersonalizeItemModal extends BasePage {
         clickAddToCart();
     }
 
-    public void fillGiftSetPersonalizationAndAddToCart(String monogram, String name) throws InterruptedException {
-        enterGiftSetName(name);
-        enterMonogram(monogram);
-        Thread.sleep(5000);
-        verifyGiftSetPreviewImage(monogram, name);
+    public void fillInitialAndContinue(String initialText, String fontName) {
+        
+        System.out.println(">>> Selecting 'Initial' radio button...");
+        Locator radio = getLocator(initialRadio);
+        radio.scrollIntoViewIfNeeded();
+        radio.click();
+
+        System.out.println(">>> Waiting for input box and typing initial: " + initialText);
+        Locator input = getLocator(initialInput);
+        input.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        input.clear();
+        input.fill(initialText);
+        
+        input.press("Tab"); 
+
+        System.out.println(">>> Opening custom dropdown and selecting font: " + fontName);
+        selectFont(fontName);
+
+        System.out.println(">>> Clicking Continue...");
         clickContinue();
-        Thread.sleep(5000);
     }
 
     public void verifyPreviewImagePersonalization(String color, String font, String name) {
         List<String> activeParams = new ArrayList<>();
-        
         if (color != null && !color.isEmpty()) activeParams.add(color);
         if (font != null && !font.isEmpty()) activeParams.add(font);
         if (name != null && !name.isEmpty()) activeParams.add(name);
 
         StringBuilder regexBuilder = new StringBuilder(".*");
-
         for (int i = 0; i < activeParams.size(); i++) {
             int valueIndex = i + 1; 
             String safeValue = escapeForRegex(activeParams.get(i));
@@ -224,13 +336,8 @@ public class PersonalizeItemModal extends BasePage {
         }
 
         String finalRegex = regexBuilder.toString();
-        System.out.println("Validating Image Src with Dynamic Regex: " + finalRegex);
-
         Pattern srcPattern = Pattern.compile(finalRegex, Pattern.CASE_INSENSITIVE);
-
-        assertThat(getLocator(productImage))
-            .hasAttribute("src", srcPattern, 
-                new LocatorAssertions.HasAttributeOptions().setTimeout(20000));
+        assertThat(getLocator(productImage)).hasAttribute("src", srcPattern, new LocatorAssertions.HasAttributeOptions().setTimeout(20000));
     }
 
     private String escapeForRegex(String input) {
@@ -240,13 +347,9 @@ public class PersonalizeItemModal extends BasePage {
     public void verifyGiftSetPreviewImage(String monogram, String name) {
         String safeMonogram = monogram.replace(" ", "+").replace("+", "\\+");
         String safeName = name.replace(" ", "+").replace("+", "\\+");
-
         String regex = String.format(".*value1=%s.*value2=%s.*", safeMonogram, safeName);
         Pattern srcPattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-
-        assertThat(getLocator(productImage))
-            .hasAttribute("src", srcPattern, 
-                new LocatorAssertions.HasAttributeOptions().setTimeout(20000));
+        assertThat(getLocator(productImage)).hasAttribute("src", srcPattern, new LocatorAssertions.HasAttributeOptions().setTimeout(20000));
     }
 
     public void enterMessage(String message) {

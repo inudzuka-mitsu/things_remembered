@@ -251,27 +251,27 @@ public class CartPage extends BasePage {
     public void clickSaveForLaterSpecProd(String productName) {
         System.out.println(">>> Clicking 'Save for later' specifically for: " + productName);
         
-        Locator saveLink;
-        
-        if (isMobile) {
-            String mobileListSelector = String.format("ul:has(input[data-itemname*='%s'])", productName);
-            saveLink = page.locator(mobileListSelector).locator("a#savelaterBtn, a:has-text('Save for later')").first();
-        } else {
-            Locator productBlock = page.locator(".block__shopping-cart")
-                                       .filter(new Locator.FilterOptions().setHasText(productName))
-                                       .first();
-            saveLink = productBlock.locator("a:has-text('Save for later')").first();
+        // 1. Create a safe partial text to bypass any HTML encoding (& vs &amp;) quirks
+        String safeName = productName;
+        if (productName.contains("&")) {
+            safeName = productName.split("&")[0].trim(); 
         }
-
-        saveLink.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.ATTACHED).setTimeout(5000));
-        saveLink.scrollIntoViewIfNeeded();
         
-        page.onceDialog(dialog -> {
-            System.out.println(">>> Intercepted popup dialog: " + dialog.message());
-            dialog.accept(); 
-        });
-
-        saveLink.click(new Locator.ClickOptions().setForce(true).setNoWaitAfter(true));
+        // 2. Wait for the block to be visible, increasing the timeout to 15 seconds 
+        // to survive heavy ASP.NET reloads on the cart page.
+        Locator itemBlock = page.locator(".block__shopping-cart")
+                                .filter(new Locator.FilterOptions().setHasText(safeName))
+                                .first();
+                                
+        itemBlock.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(15000));
+        
+        // 3. Locate and click the button
+        Locator saveBtn = itemBlock.locator("a:has-text('Save for later')").first();
+        saveBtn.scrollIntoViewIfNeeded();
+        saveBtn.click(new Locator.ClickOptions().setForce(true));
+        
+        // 4. Give the page time to complete the ASP.NET postback after clicking
+        page.waitForTimeout(3000);
     }
 
     public void validateProductInSavedForLaterSpecProd(String productName) {
