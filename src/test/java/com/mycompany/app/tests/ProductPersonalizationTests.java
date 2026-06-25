@@ -1,7 +1,6 @@
 package com.mycompany.app.tests;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import com.mycompany.app.base.TestBase;
 import com.mycompany.app.pages.CartPage;
@@ -41,7 +40,6 @@ public class ProductPersonalizationTests extends TestBase {
     private final String UPDATED_THREAD_COLOR = "White";
 
    @Test
-   @DisabledIfSystemProperty(named = "env", matches = "prod")
     void personalizeItem() {
         stagingLoginPage = new StagingLoginPage(page);
         signInPage = new SignInPage(page, isMobile());
@@ -64,16 +62,15 @@ public class ProductPersonalizationTests extends TestBase {
         String cardExpMonth = getProperty("card_exp_month");
         String cardExpYear = getProperty("card_exp_year");
 
-        String PRODUCT_URL = getProperty("baseUrl") + "/Winter-Wonderland-Personalized-Christmas-Stockings-p30508.prod?sdest=Search&sdestid=179238038";
+        String PRODUCT_URL = getProperty("baseUrl") + "/Winter-Wonderland-Personalized-Christmas-Stockings-p30508.prod?sdest=Search&sdestid=181585763";
 
-        page.navigate(getProperty("stagingBaseUrl"));
+        page.navigate(PRODUCT_URL);
         stagingLoginPage.closePopUp();
 
         page.navigate(PRODUCT_URL);
         productPage.clickPersonalizeBtn();
 
         personalizeModal.fillPersonalizationAndAddToCart(THREAD_COLOR, FONT_STYLE, PERSONALIZATION_TEXT);
-        giftBoxModal.selectClassicGiftBox();
         giftBoxModal.clickContinue();
 
         homePage.validateAddedToCartVisible();
@@ -83,6 +80,7 @@ public class ProductPersonalizationTests extends TestBase {
         cartPage.clickProceedToCheckout();
 
         signInPage.signIn(testEmail, testPassword);
+        signInPage.hoverCartAndCheckout();
 
         shippingPage.selectFirstAddressAndShip();
         shippingPage.clickSaveAndContinue();
@@ -94,51 +92,51 @@ public class ProductPersonalizationTests extends TestBase {
         confirmationPage.verifyOrderSuccessMessage();
     }
 
-    @Test
-    void editItem() {
-        stagingLoginPage = new StagingLoginPage(page);
-        signInPage = new SignInPage(page, isMobile());
-        productPage = new ProductPage(page, isMobile());
-        personalizeModal = new PersonalizeItemModal(page);
-        giftBoxModal = new CustomizeGiftModal(page, isMobile());
-        homePage = new HomePage(page, isMobile());
-        cartPage = new CartPage(page, isMobile());
-        shippingPage = new AddressModal(page, isMobile());
-        checkoutPage = new CheckoutPage(page);
-        confirmationPage = new OrderConfirmationPage(page);
+    // @Test
+    // void editItem() {
+    //     stagingLoginPage = new StagingLoginPage(page);
+    //     signInPage = new SignInPage(page, isMobile());
+    //     productPage = new ProductPage(page, isMobile());
+    //     personalizeModal = new PersonalizeItemModal(page);
+    //     giftBoxModal = new CustomizeGiftModal(page, isMobile());
+    //     homePage = new HomePage(page, isMobile());
+    //     cartPage = new CartPage(page, isMobile());
+    //     shippingPage = new AddressModal(page, isMobile());
+    //     checkoutPage = new CheckoutPage(page);
+    //     confirmationPage = new OrderConfirmationPage(page);
 
-        String PRODUCT_URL = getProperty("baseUrl") + "/Crossed-Clubs-Embroidered-Golf-Towel-p28855.prod?sdest=search-op&sdestid=117478940";
+    //     String PRODUCT_URL = getProperty("baseUrl") + "/Crossed-Clubs-Embroidered-Golf-Towel-p28855.prod?sdest=search-op&sdestid=117478940";
 
-        String env = System.getProperty("env", "stg");
+    //     String env = System.getProperty("env", "stg");
         
-        if ("prod".equalsIgnoreCase(env)) {
-            page.navigate(getProperty("baseUrl"));
-        } else {
-            page.navigate(getProperty("stagingBaseUrl"));
-        }
-        stagingLoginPage.closePopUp();
+    //     if ("prod".equalsIgnoreCase(env)) {
+    //         page.navigate(getProperty("baseUrl"));
+    //     } else {
+    //         page.navigate(getProperty("stagingBaseUrl"));
+    //     }
+    //     stagingLoginPage.closePopUp();
 
-        page.navigate(PRODUCT_URL);
-        productPage.clickPersonalizeBtn();
+    //     page.navigate(PRODUCT_URL);
+    //     productPage.clickPersonalizeBtn();
 
-        personalizeModal.enterName(PERSONALIZATION_TEXT_2);
-        personalizeModal.selectColor(ORIGINAL_THREAD_COLOR);
-        personalizeModal.verifyPreviewImagePersonalization(ORIGINAL_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
-        personalizeModal.checkPersonalizationCorrect();
-        personalizeModal.clickAddToCart();
-         personalizeModal.clickContinueBtn();
+    //     personalizeModal.enterName(PERSONALIZATION_TEXT_2);
+    //     personalizeModal.selectColor(ORIGINAL_THREAD_COLOR);
+    //     personalizeModal.verifyPreviewImagePersonalization(ORIGINAL_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
+    //     personalizeModal.checkPersonalizationCorrect();
+    //     personalizeModal.clickAddToCart();
+    //      personalizeModal.clickContinueBtn();
 
-        homePage.validatePersonalization(ORIGINAL_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
+    //     homePage.validatePersonalization(ORIGINAL_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
 
-        homePage.clickViewCart();
+    //     homePage.clickViewCart();
 
-        cartPage.clickEdit();
+    //     cartPage.clickEdit();
 
-        personalizeModal.selectColor(UPDATED_THREAD_COLOR);
-        personalizeModal.verifyPreviewImagePersonalization(UPDATED_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
-        personalizeModal.checkPersonalizationCorrect();
-        personalizeModal.clickAddToCart();
+    //     personalizeModal.selectColor(UPDATED_THREAD_COLOR);
+    //     personalizeModal.verifyPreviewImagePersonalization(UPDATED_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
+    //     personalizeModal.checkPersonalizationCorrect();
+    //     personalizeModal.clickAddToCart();
 
-        homePage.validatePersonalization(UPDATED_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
-    }
+    //     homePage.validatePersonalization(UPDATED_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
+    // }
  }

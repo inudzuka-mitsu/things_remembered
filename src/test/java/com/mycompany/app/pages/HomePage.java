@@ -2,6 +2,7 @@ package com.mycompany.app.pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.assertions.LocatorAssertions;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class HomePage extends BasePage {
@@ -17,8 +18,8 @@ public class HomePage extends BasePage {
     private final String searchBar = "input#searchBox";
     private final String viewCartButton = "div.right.fl a[href*='Cart.aspx']";
     private final String checkoutBtn = "";
-    private final String addedToCartHeader = "";
-    private final String personalizationDetails = "";
+    private final String addedToCartHeader = "#ctl00_mainContent_itemAddedToCart_txtTitle";
+    private final String personalizationDetails = "#ctl00_mainContent_itemAddedToCart_txtAddToCartPers";
     private final String forHerNavLink = ".shop-recipients-list a:text-is('For Her')";
 
     // --- MOBILE APP LOCATORS ---
@@ -59,11 +60,11 @@ public class HomePage extends BasePage {
     public void validateAddedToCartVisible() {
         if (isMobile) {
             Locator header = page.locator(mobileAddedToCartHeader);
-            assertThat(header).isVisible();
+            assertThat(header).isVisible(new LocatorAssertions.IsVisibleOptions().setTimeout(15000));
             assertThat(header).containsText("added this item to your cart"); 
         } else {
             Locator header = page.locator(addedToCartHeader);
-            assertThat(header).isVisible();
+            assertThat(header).isVisible(new LocatorAssertions.IsVisibleOptions().setTimeout(15000));
             assertThat(header).containsText("Added To Cart");
         }
     }

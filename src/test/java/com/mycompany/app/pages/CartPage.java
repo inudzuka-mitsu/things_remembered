@@ -21,7 +21,7 @@ public class CartPage extends BasePage {
     
     private final String quantityInput = "input.inp__qty-title";
     private final String updateButton = "input.btn__qty-update, .updateQtyBT"; 
-    private final String itemPriceText = ".li__item-price b, li:has(label:has-text('Price:')) span.bold";
+    private final String itemPriceText = "li:has-text('Price:') b, .li__item-price b, li:has(label:has-text('Price:')) span.bold, li:has(label:has-text('Price:'))";
     private final String boxPriceText = ".li__gift-box span.reg";
     private final String totalPriceText = ".li__item-total .sp__amt-total, .li__itm-total .sp__amt-total"; 
     private final String proceedToCheckoutBtn = "a.begin-checkout:has-text('Proceed To Checkout'), button.begin-checkout:has-text('Proceed To Checkout')";

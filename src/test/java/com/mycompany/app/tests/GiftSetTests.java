@@ -63,12 +63,19 @@ public class GiftSetTests extends TestBase {
         personalizeModal.fillInitialAndContinue("L", "Script"); 
 
         personalizeModal.selectCustomDropdown("Choose Pattern", "Stripe");
+        page.waitForTimeout(2000);
         personalizeModal.selectCustomDropdown("Choose Pattern Color", "Linen");
+         page.waitForTimeout(2000);
         personalizeModal.selectCustomDropdown("Choose Background Color", "Ivory");
+         page.waitForTimeout(2000);
         personalizeModal.selectCustomDropdown("Choose Text Color", "Black");
+         page.waitForTimeout(2000);
         personalizeModal.selectCustomDropdown("Choose Text Box Color", "Brown");
+         page.waitForTimeout(2000);
 
-        personalizeModal.fillMultiLinePersonalization(PERSONALIZATION_MSG);
+         personalizeModal.fillMultiLinePersonalization(PERSONALIZATION_MSG);
+        page.waitForTimeout(2000);
+
 
         personalizeModal.clickContinue();
 

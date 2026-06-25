@@ -83,6 +83,7 @@ public class AddressModal extends BasePage {
     }
 
     public void clickSaveAndContinue() {
+        page.waitForTimeout(9000); 
         if (!isMobile) {
             page.locator(saveAndContinueBtn).click();
         } else {

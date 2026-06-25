@@ -18,10 +18,23 @@ public class SignInPage extends BasePage {
     private final String emailInput = "input[id*='Email']";
     private final String passwordInput = "input[id*='Password']";
     private final String guestNewAccountBtn = "[name='ctl00$belowHeader$Button2']";
+    private final String cartDropdownWrapper = "li.action-dropmenu";
+    private final String dropdownCheckoutBtn = "a.begin-checkout";
 
     // MOBILE APP LOCATORS
 
     private final String mobileGuestNewAccountBtn = "a[href='/CreateProfile.aspx']";
+
+    public void hoverCartAndCheckout() {
+        System.out.println(">>> Hovering over the cart icon...");
+        Locator cartMenu = page.locator(cartDropdownWrapper).nth(1);
+        
+        cartMenu.hover();
+        
+        System.out.println(">>> Clicking Checkout from the dropdown...");
+        Locator checkoutBtn = page.locator(dropdownCheckoutBtn).first();
+        checkoutBtn.click();
+    }
 
     public void enterEmail(String email) {
         page.locator(emailInput).fill(email);

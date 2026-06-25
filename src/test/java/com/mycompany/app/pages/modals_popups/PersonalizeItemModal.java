@@ -18,32 +18,35 @@ public class PersonalizeItemModal extends BasePage {
         super(page);
     }
 
-    private final String monogramRadio = "label:has-text('Monogram')";
-    private final String nameRadio = "label:has-text('Name')";
-    private final String initialRadio = "label:has-text('Initial')";
+    private final String monogramRadio = "label:has-text('Monogram'):visible";
+    private final String nameRadio = "label:has-text('Name'):visible";
+    private final String initialRadio = "label:has-text('Initial'):visible";
 
-    private final String initialInput = "input[placeholder='Initial']";
-    private final String nameInputBox = "input[placeholder='Name']";
-    private final String monoFirstInput = "input[placeholder='First']";
-    private final String monoSecondInput = "input[placeholder='Second']";
-    private final String monoThirdInput = "input[placeholder='Third']";
+    private final String initialInput = "input[placeholder='Initial']:visible";
+    private final String nameInputBox = "input[placeholder='Name']:visible";
+    private final String monoFirstInput = "input[placeholder='First']:visible";
+    private final String monoSecondInput = "input[placeholder='Second']:visible";
+    private final String monoThirdInput = "input[placeholder='Third']:visible";
 
-    private final String customDropdownToggleTemplate = "tr:has(.pers-title:has-text('%s')) + tr .dropdown-btn";
-    private final String customDropdownOptionTemplate = "tr:has(.pers-title:has-text('%s')) + tr li[data-val='%s']";
+    private final String customDropdownToggleTemplate = "tr:has(.pers-title:has-text('%s')) + tr .dropdown-btn, div.personalization_name:has-text('%s') ~ .custom-dropdown__wrapper .viewchoices-button";
+    private final String customDropdownOptionTemplate = "tr:has(.pers-title:has-text('%s')) + tr li[data-val='%s'], div.viewchoices-modal:visible ul li a:has(b:has-text('%s'))";
 
-    private final String multiLineTextArea = "tr:has(.pers-title:has-text('Personalization')) + tr textarea";
+    private final String multiLineTextArea = "tr:has(.pers-title:has-text('Personalization')) + tr textarea, div.personalization_name:has-text('Personalization') ~ textarea";
     
-    private final String fontDropdownToggle = ".monogramcontent:visible .dropdownToggle";
-    private final String fontOptionTemplate = ".monogramctdd:visible .imgdd[data-imgname='%s']";
+    private final String fontDropdownToggle = ".monogramcontent:visible .dropdownToggle, .imagedropdown:visible .dropdownToggle, tr:has(.pers-title:has-text('Font')) + tr .dropdown-btn";
+    private final String fontOptionTemplate = ".monogramctdd:visible .imgdd[data-imgname='%s'], .imagedropdown:visible .imgdd[data-imgname='%s'], li[data-val='%s']";
 
     private final String threadColorDropdown = "tr:has(.pers-title:has-text('Thread Color')) + tr .dropdown-btn, fieldset:has(.personalization_name:has-text('Thread Color')) .dropdown-btn, div.dropdown-btn";
     private final String colorDropdownByLabel = "tr:has(.pers-title:has-text('Color')) + tr .dropdown-btn, fieldset:has(.personalization_name:has-text('Color')) .dropdown-btn, div.dropdown-btn";
     private final String activeDropdownOptions = ".select-active li[data-val='%s'], .select-active li[data-option='%s']";
     
     private final String productImage = "#productImage";
-    private final String continueButton = "input#ctl00_mainContent_addToCart_addToCartButton, button#addToCartLink[value='Continue']";
+    private final String continueButton = "input#ctl00_mainContent_addToCart_addToCartButton:visible, #addToCartLink[value='Continue']:visible";
     private final String contBtn = "input#continueShoppingLink, #cmdAddonGiftBox";
-    private final String addToCartBtn = "input[value='Add To Cart']";
+    
+    // --- UPDATED LOCATOR: Tag-agnostic to handle Desktop and Mobile variations ---
+    private final String addToCartBtn = "input[value='Add To Cart']:visible, button:has-text('Add To Cart'):visible, #addToCartLink[value='Add To Cart']:visible";
+    
     private final String noGiftBoxRadio = "label:has-text('No Gift Box')";
     private final String uploadPhotoBtn = "div.uploadthumb img, div.uploadthumbnail img";
 
@@ -78,11 +81,11 @@ public class PersonalizeItemModal extends BasePage {
     }
 
     public void selectInitialAndFill(String initialText) {
-        Locator radio = getLocator(initialRadio);
+        Locator radio = getLocator(initialRadio).first();
         radio.scrollIntoViewIfNeeded();
         radio.click();
 
-        Locator input = getLocator(initialInput);
+        Locator input = getLocator(initialInput).first();
         input.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         input.clear();
         input.fill(initialText);
@@ -90,11 +93,11 @@ public class PersonalizeItemModal extends BasePage {
     }
 
     public void selectNameAndFill(String nameText) {
-        Locator radio = getLocator(nameRadio);
+        Locator radio = getLocator(nameRadio).first();
         radio.scrollIntoViewIfNeeded();
         radio.click();
 
-        Locator input = getLocator(nameInputBox);
+        Locator input = getLocator(nameInputBox).first();
         input.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         input.clear();
         input.fill(nameText);
@@ -106,17 +109,22 @@ public class PersonalizeItemModal extends BasePage {
 
         System.out.println(">>> Selecting '" + optionName + "' from '" + dropdownTitle + "' dropdown...");
 
-        String toggleSelector = String.format(customDropdownToggleTemplate, dropdownTitle);
+        String toggleSelector = String.format(customDropdownToggleTemplate, dropdownTitle, dropdownTitle);
         Locator toggleBtn = getLocator(toggleSelector).first();
         
         toggleBtn.scrollIntoViewIfNeeded();
         toggleBtn.click(new Locator.ClickOptions().setForce(true));
 
-        String optionSelector = String.format(customDropdownOptionTemplate, dropdownTitle, optionName);
+        page.waitForTimeout(500);
+
+        String optionSelector = String.format(customDropdownOptionTemplate, dropdownTitle, optionName, optionName);
         Locator optionToSelect = getLocator(optionSelector).first();
 
-        optionToSelect.scrollIntoViewIfNeeded();
-        optionToSelect.click(new Locator.ClickOptions().setForce(true));
+        optionToSelect.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(5000));
+        
+        optionToSelect.evaluate("node => { node.scrollIntoView(); node.click(); }");
+        
+        page.waitForTimeout(1500);
     }
 
     public void fillMultiLinePersonalization(String text) {
@@ -124,10 +132,23 @@ public class PersonalizeItemModal extends BasePage {
         
         Locator textArea = getLocator(multiLineTextArea).first();
         textArea.scrollIntoViewIfNeeded();
+        
+        textArea.click();
         textArea.clear();
-        textArea.fill(text);
+        
+        textArea.evaluate("(el, msg) => { " +
+            "el.focus(); " +
+            "el.value = msg; " +
+            "el.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'A' })); " +
+            "el.dispatchEvent(new Event('input', { bubbles: true })); " +
+            "el.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'A' })); " +
+            "el.dispatchEvent(new Event('change', { bubbles: true })); " +
+            "el.dispatchEvent(new Event('blur', { bubbles: true })); " +
+        "}", text);
         
         textArea.press("Tab"); 
+        
+        page.waitForTimeout(1500);
     }
 
     public void enterPersonalizationMessage(String message) {
@@ -143,9 +164,13 @@ public class PersonalizeItemModal extends BasePage {
         textArea.click();
         textArea.clear();
         
+        // --- UPDATED JS INJECTION ---
         textArea.evaluate("(el, msg) => { " +
+            "el.focus(); " +
             "el.value = msg; " +
+            "el.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: 'A' })); " +
             "el.dispatchEvent(new Event('input', { bubbles: true })); " +
+            "el.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: 'A' })); " +
             "el.dispatchEvent(new Event('change', { bubbles: true })); " +
             "el.dispatchEvent(new Event('blur', { bubbles: true })); " +
         "}", message);
@@ -156,21 +181,21 @@ public class PersonalizeItemModal extends BasePage {
     }
 
     public void selectMonogramAndFill(String first, String second, String third) {
-        Locator radio = getLocator(monogramRadio);
+        Locator radio = getLocator(monogramRadio).first();
         radio.scrollIntoViewIfNeeded();
         radio.click();
 
-        Locator firstBox = getLocator(monoFirstInput);
+        Locator firstBox = getLocator(monoFirstInput).first();
         firstBox.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         
         firstBox.clear();
         firstBox.fill(first);
         
-        Locator secondBox = getLocator(monoSecondInput);
+        Locator secondBox = getLocator(monoSecondInput).first();
         secondBox.clear();
         secondBox.fill(second);
 
-        Locator thirdBox = getLocator(monoThirdInput);
+        Locator thirdBox = getLocator(monoThirdInput).first();
         thirdBox.clear();
         thirdBox.fill(third);
         thirdBox.press("Tab");
@@ -183,9 +208,13 @@ public class PersonalizeItemModal extends BasePage {
         dropdownBtn.scrollIntoViewIfNeeded();
         dropdownBtn.click(new Locator.ClickOptions().setForce(true));
         
-        String optionSelector = String.format(fontOptionTemplate, fontName);
+        page.waitForTimeout(500); 
+        
+        String optionSelector = String.format(fontOptionTemplate, fontName, fontName, fontName);
         Locator fontOption = getLocator(optionSelector).first();
     
+        fontOption.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        
         fontOption.scrollIntoViewIfNeeded();
         fontOption.click(new Locator.ClickOptions().setForce(true));
     }
@@ -301,14 +330,16 @@ public class PersonalizeItemModal extends BasePage {
     }
 
     public void fillInitialAndContinue(String initialText, String fontName) {
-        
         System.out.println(">>> Selecting 'Initial' radio button...");
-        Locator radio = getLocator(initialRadio);
+        Locator radio = getLocator(initialRadio).first();
+        
+        radio.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(10000));
+        
         radio.scrollIntoViewIfNeeded();
         radio.click();
 
         System.out.println(">>> Waiting for input box and typing initial: " + initialText);
-        Locator input = getLocator(initialInput);
+        Locator input = getLocator(initialInput).first();
         input.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         input.clear();
         input.fill(initialText);
@@ -320,6 +351,8 @@ public class PersonalizeItemModal extends BasePage {
 
         System.out.println(">>> Clicking Continue...");
         clickContinue();
+        
+        page.waitForTimeout(1000);
     }
 
     public void verifyPreviewImagePersonalization(String color, String font, String name) {
