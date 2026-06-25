@@ -45,7 +45,7 @@ public class PersonalizeItemModal extends BasePage {
     private final String contBtn = "input#continueShoppingLink, #cmdAddonGiftBox";
     
     // --- UPDATED LOCATOR: Tag-agnostic to handle Desktop and Mobile variations ---
-    private final String addToCartBtn = "input[value='Add To Cart']:visible, button:has-text('Add To Cart'):visible, #addToCartLink[value='Add To Cart']:visible";
+    private final String addToCartBtn = "input[value='Add To Cart']:visible, button:has-text('Add To Cart'):visible, #addToCartLink[value='Add To Cart']:visible, input#ctl00_mainContent_addToCart_addToCartButton";
     
     private final String noGiftBoxRadio = "label:has-text('No Gift Box')";
     private final String uploadPhotoBtn = "div.uploadthumb img, div.uploadthumbnail img";

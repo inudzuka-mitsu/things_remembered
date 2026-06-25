@@ -19,7 +19,7 @@ public class HomePage extends BasePage {
     private final String viewCartButton = "div.right.fl a[href*='Cart.aspx']";
     private final String checkoutBtn = "";
     private final String addedToCartHeader = "#ctl00_mainContent_itemAddedToCart_txtTitle";
-    private final String personalizationDetails = "#ctl00_mainContent_itemAddedToCart_txtAddToCartPers";
+    private final String personalizationDetails = "#ctl00_mainContent_itemAddedToCart_txtAddToCartPers, #ctl00_belowHeader_itemUpdatedInfoControl_txtAddToCartPers";
     private final String forHerNavLink = ".shop-recipients-list a:text-is('For Her')";
 
     // --- MOBILE APP LOCATORS ---

@@ -15,7 +15,7 @@ import com.mycompany.app.pages.modals_popups.CustomizeGiftModal;
 import com.mycompany.app.pages.modals_popups.PersonalizeItemModal;
 
 
-// These tests are configured for desktop app, iPhone 13 Pro Max, Samsung Galaxy A52
+// These tests are configured for TR desktop app
 
 public class ProductPersonalizationTests extends TestBase {
 
@@ -92,51 +92,44 @@ public class ProductPersonalizationTests extends TestBase {
         confirmationPage.verifyOrderSuccessMessage();
     }
 
-    // @Test
-    // void editItem() {
-    //     stagingLoginPage = new StagingLoginPage(page);
-    //     signInPage = new SignInPage(page, isMobile());
-    //     productPage = new ProductPage(page, isMobile());
-    //     personalizeModal = new PersonalizeItemModal(page);
-    //     giftBoxModal = new CustomizeGiftModal(page, isMobile());
-    //     homePage = new HomePage(page, isMobile());
-    //     cartPage = new CartPage(page, isMobile());
-    //     shippingPage = new AddressModal(page, isMobile());
-    //     checkoutPage = new CheckoutPage(page);
-    //     confirmationPage = new OrderConfirmationPage(page);
+    @Test
+    void editItem() {
+        stagingLoginPage = new StagingLoginPage(page);
+        signInPage = new SignInPage(page, isMobile());
+        productPage = new ProductPage(page, isMobile());
+        personalizeModal = new PersonalizeItemModal(page);
+        giftBoxModal = new CustomizeGiftModal(page, isMobile());
+        homePage = new HomePage(page, isMobile());
+        cartPage = new CartPage(page, isMobile());
+        shippingPage = new AddressModal(page, isMobile());
+        checkoutPage = new CheckoutPage(page);
+        confirmationPage = new OrderConfirmationPage(page);
 
-    //     String PRODUCT_URL = getProperty("baseUrl") + "/Crossed-Clubs-Embroidered-Golf-Towel-p28855.prod?sdest=search-op&sdestid=117478940";
+        String PRODUCT_URL = getProperty("baseUrl") + "/Crossed-Clubs-Embroidered-Golf-Towel-p28855.prod?sdest=search-op&sdestid=117478940";
 
-    //     String env = System.getProperty("env", "stg");
+        page.navigate(PRODUCT_URL);
         
-    //     if ("prod".equalsIgnoreCase(env)) {
-    //         page.navigate(getProperty("baseUrl"));
-    //     } else {
-    //         page.navigate(getProperty("stagingBaseUrl"));
-    //     }
-    //     stagingLoginPage.closePopUp();
+        stagingLoginPage.closePopUp();
 
-    //     page.navigate(PRODUCT_URL);
-    //     productPage.clickPersonalizeBtn();
+        productPage.clickPersonalizeBtn();
 
-    //     personalizeModal.enterName(PERSONALIZATION_TEXT_2);
-    //     personalizeModal.selectColor(ORIGINAL_THREAD_COLOR);
-    //     personalizeModal.verifyPreviewImagePersonalization(ORIGINAL_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
-    //     personalizeModal.checkPersonalizationCorrect();
-    //     personalizeModal.clickAddToCart();
-    //      personalizeModal.clickContinueBtn();
+        personalizeModal.enterName(PERSONALIZATION_TEXT_2);
+        personalizeModal.selectColor(ORIGINAL_THREAD_COLOR);
+        personalizeModal.verifyPreviewImagePersonalization(ORIGINAL_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
+        personalizeModal.checkPersonalizationCorrect();
+        personalizeModal.clickAddToCart();
 
-    //     homePage.validatePersonalization(ORIGINAL_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
+        homePage.validatePersonalization(ORIGINAL_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
 
-    //     homePage.clickViewCart();
+        homePage.clickViewCart();
 
-    //     cartPage.clickEdit();
+        cartPage.clickEdit();
 
-    //     personalizeModal.selectColor(UPDATED_THREAD_COLOR);
-    //     personalizeModal.verifyPreviewImagePersonalization(UPDATED_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
-    //     personalizeModal.checkPersonalizationCorrect();
-    //     personalizeModal.clickAddToCart();
+        personalizeModal.selectColor(UPDATED_THREAD_COLOR);
+        personalizeModal.verifyPreviewImagePersonalization(UPDATED_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
+        personalizeModal.checkPersonalizationCorrect();
+        personalizeModal.clickAddToCart();
 
-    //     homePage.validatePersonalization(UPDATED_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
-    // }
+        homePage.validatePersonalization(UPDATED_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
+    }
  }
