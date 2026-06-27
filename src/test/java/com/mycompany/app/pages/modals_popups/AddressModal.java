@@ -87,9 +87,8 @@ public class AddressModal extends BasePage {
         if (!isMobile) {
             page.locator(saveAndContinueBtn).click();
         } else {
-            Locator giftOptionsContinueBtn = page.locator(".gift-input-wrapper input#submitButton").first();
-            giftOptionsContinueBtn.scrollIntoViewIfNeeded();
-            giftOptionsContinueBtn.click(new Locator.ClickOptions().setForce(true));
+            page.locator("[value=\"Save & Continue Checkout\"]").click();
+            page.waitForTimeout(8000);
         }
     }
 

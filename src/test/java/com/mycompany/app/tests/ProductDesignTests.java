@@ -61,7 +61,7 @@ public class ProductDesignTests extends TestBase {
         homePage = new HomePage(page, isMobile());
         signInPage = new SignInPage(page, isMobile());
         shippingPage = new AddressModal(page, isMobile());
-        checkoutPage = new CheckoutPage(page);
+        checkoutPage = new CheckoutPage(page, isMobile());
         confirmationPage = new OrderConfirmationPage(page);
         header = new Header(page, isMobile());
 
@@ -109,7 +109,7 @@ public class ProductDesignTests extends TestBase {
         homePage = new HomePage(page, isMobile());
         signInPage = new SignInPage(page, isMobile());
         shippingPage = new AddressModal(page, isMobile());
-        checkoutPage = new CheckoutPage(page);
+        checkoutPage = new CheckoutPage(page, isMobile());
         confirmationPage = new OrderConfirmationPage(page);
         header = new Header(page, isMobile());
 

@@ -33,8 +33,11 @@ public class PersonalizeItemModal extends BasePage {
 
     private final String multiLineTextArea = "tr:has(.pers-title:has-text('Personalization')) + tr textarea, div.personalization_name:has-text('Personalization') ~ textarea";
     
-    private final String fontDropdownToggle = ".monogramcontent:visible .dropdownToggle, .imagedropdown:visible .dropdownToggle, tr:has(.pers-title:has-text('Font')) + tr .dropdown-btn";
-    private final String fontOptionTemplate = ".monogramctdd:visible .imgdd[data-imgname='%s'], .imagedropdown:visible .imgdd[data-imgname='%s'], li[data-val='%s']";
+    private final String fontDropdownToggle = ".monogramcontent:visible .dropdownToggle, .imagedropdown:visible .dropdownToggle, " +
+        "tr:has(.pers-title:has-text('Font')) + tr .dropdown-btn, fieldset:has(.personalization_name:has-text('Font')) .dropdown-btn, div.personalization_name:has-text('Font') ~ .custom-dropdown__wrapper .viewchoices-button, " +
+        "tr:has(.pers-title:has-text('Choose Font')) + tr .dropdown-btn, fieldset:has(.personalization_name:has-text('Choose Font')) .dropdown-btn, div.personalization_name:has-text('Choose Font') ~ .custom-dropdown__wrapper .viewchoices-button";
+
+    private final String fontOptionTemplate = ".monogramctdd:visible .imgdd[data-imgname='%s'], .imagedropdown:visible .imgdd[data-imgname='%s'], li[data-val='%s'], div.viewchoices-modal:visible ul li a:has(b:has-text('%s'))";
 
     private final String threadColorDropdown = "tr:has(.pers-title:has-text('Thread Color')) + tr .dropdown-btn, fieldset:has(.personalization_name:has-text('Thread Color')) .dropdown-btn, div.dropdown-btn";
     private final String colorDropdownByLabel = "tr:has(.pers-title:has-text('Color')) + tr .dropdown-btn, fieldset:has(.personalization_name:has-text('Color')) .dropdown-btn, div.dropdown-btn";
@@ -43,9 +46,8 @@ public class PersonalizeItemModal extends BasePage {
     private final String productImage = "#productImage";
     private final String continueButton = "input#ctl00_mainContent_addToCart_addToCartButton:visible, #addToCartLink[value='Continue']:visible";
     private final String contBtn = "input#continueShoppingLink, #cmdAddonGiftBox";
-    
-    // --- UPDATED LOCATOR: Tag-agnostic to handle Desktop and Mobile variations ---
-    private final String addToCartBtn = "input[value='Add To Cart']:visible, button:has-text('Add To Cart'):visible, #addToCartLink[value='Add To Cart']:visible, input#ctl00_mainContent_addToCart_addToCartButton";
+   
+    private final String addToCartBtn = "input#addToCartLink, input[value='Add To Cart']:visible, input[value='Add to Cart']:visible, button:has-text('Add To Cart'):visible, button:has-text('Add to Cart'):visible, #addToCartLink[value='Add To Cart']:visible, #addToCartLink[value='Add to Cart']:visible, input#ctl00_mainContent_addToCart_addToCartButton";
     
     private final String noGiftBoxRadio = "label:has-text('No Gift Box')";
     private final String uploadPhotoBtn = "div.uploadthumb img, div.uploadthumbnail img";
@@ -204,19 +206,32 @@ public class PersonalizeItemModal extends BasePage {
     public void selectFont(String fontName) {
         if (fontName == null || fontName.isEmpty()) return;
 
+        System.out.println(">>> Selecting '" + fontName + "' from font dropdown...");
+
         Locator dropdownBtn = getLocator(fontDropdownToggle).first();
-        dropdownBtn.scrollIntoViewIfNeeded();
-        dropdownBtn.click(new Locator.ClickOptions().setForce(true));
+        
+        dropdownBtn.evaluate("node => { node.scrollIntoView(); node.click(); }");
         
         page.waitForTimeout(500); 
         
-        String optionSelector = String.format(fontOptionTemplate, fontName, fontName, fontName);
+        String optionSelector = String.format(fontOptionTemplate, fontName, fontName, fontName, fontName);
         Locator fontOption = getLocator(optionSelector).first();
     
-        fontOption.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        fontOption.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(5000));
         
-        fontOption.scrollIntoViewIfNeeded();
-        fontOption.click(new Locator.ClickOptions().setForce(true));
+        fontOption.evaluate("node => { node.scrollIntoView(); node.click(); }");
+        
+        page.waitForTimeout(500);
+        
+        try {
+            Locator doneBtn = getLocator("div.viewchoices-modal:visible .viewchoices-close-btn").first();
+            if (doneBtn.count() > 0) {
+                System.out.println(">>> Closing mobile font modal...");
+                doneBtn.evaluate("node => { node.click(); }");
+                page.waitForTimeout(1000); 
+            }
+        } catch (Exception e) {
+        }
     }
 
     public void uploadPhoto(String filePath) {

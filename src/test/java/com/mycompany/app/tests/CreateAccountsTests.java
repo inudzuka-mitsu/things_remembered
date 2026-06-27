@@ -32,7 +32,7 @@ public class CreateAccountsTests extends TestBase {
         createProfilePage = new CreateProfilePage(page, isMobile());
         addAddressPage = new AddAddressPage(page, isMobile());
         addressModal = new AddressModal(page, isMobile());
-        checkoutPage = new CheckoutPage(page);
+        checkoutPage = new CheckoutPage(page, isMobile());
         header = new Header(page, isMobile());
 
         String email = "test_aqa_" + + System.currentTimeMillis() + "@yahoo.com";
@@ -81,7 +81,7 @@ public class CreateAccountsTests extends TestBase {
         createProfilePage = new CreateProfilePage(page, isMobile());
         addAddressPage = new AddAddressPage(page, isMobile());
         addressModal = new AddressModal(page, isMobile());
-        checkoutPage = new CheckoutPage(page);
+        checkoutPage = new CheckoutPage(page, isMobile());
         header = new Header(page, isMobile());
 
         String email = "test_aqa2_" + + System.currentTimeMillis() + "@yahoo.com";

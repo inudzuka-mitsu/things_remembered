@@ -25,8 +25,8 @@ public class HomePage extends BasePage {
     // --- MOBILE APP LOCATORS ---
     private final String mobileSearchBar = "input#searchString";
     private final String mobileForHerLink = ".footer__nav-links a:has-text('For Her')";
-    private final String mobileAddedToCartHeader = "";
-    private final String mobilePersonalizationDetails = "";
+    private final String mobileAddedToCartHeader = ".block__top-header h2";
+    private final String mobilePersonalizationDetails = ".divItemPerContent";
     private final String mobileViewCartButton = "input[value='View Cart >']";
     private final String mobileCheckoutBtn = "";
 
@@ -61,7 +61,7 @@ public class HomePage extends BasePage {
         if (isMobile) {
             Locator header = page.locator(mobileAddedToCartHeader);
             assertThat(header).isVisible(new LocatorAssertions.IsVisibleOptions().setTimeout(15000));
-            assertThat(header).containsText("added this item to your cart"); 
+            assertThat(header).containsText("You have added this item to your cart"); 
         } else {
             Locator header = page.locator(addedToCartHeader);
             assertThat(header).isVisible(new LocatorAssertions.IsVisibleOptions().setTimeout(15000));

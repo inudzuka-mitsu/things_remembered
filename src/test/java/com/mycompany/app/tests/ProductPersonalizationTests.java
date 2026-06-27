@@ -15,7 +15,7 @@ import com.mycompany.app.pages.modals_popups.CustomizeGiftModal;
 import com.mycompany.app.pages.modals_popups.PersonalizeItemModal;
 
 
-// These tests are configured for TR desktop app
+// These tests are configured for TR desktop app (stg and prod), iPhone 13 Pro Max, Samsung Galaxy A52
 
 public class ProductPersonalizationTests extends TestBase {
 
@@ -49,7 +49,7 @@ public class ProductPersonalizationTests extends TestBase {
         homePage = new HomePage(page, isMobile());
         cartPage = new CartPage(page, isMobile());
         shippingPage = new AddressModal(page, isMobile());
-        checkoutPage = new CheckoutPage(page);
+        checkoutPage = new CheckoutPage(page, isMobile());
         confirmationPage = new OrderConfirmationPage(page);
 
         String testEmail = getProperty("test_email_2");
@@ -80,7 +80,10 @@ public class ProductPersonalizationTests extends TestBase {
         cartPage.clickProceedToCheckout();
 
         signInPage.signIn(testEmail, testPassword);
-        signInPage.hoverCartAndCheckout();
+
+        if (!isMobile()) {
+           signInPage.hoverCartAndCheckout();
+        }
 
         shippingPage.selectFirstAddressAndShip();
         shippingPage.clickSaveAndContinue();
@@ -102,7 +105,7 @@ public class ProductPersonalizationTests extends TestBase {
         homePage = new HomePage(page, isMobile());
         cartPage = new CartPage(page, isMobile());
         shippingPage = new AddressModal(page, isMobile());
-        checkoutPage = new CheckoutPage(page);
+        checkoutPage = new CheckoutPage(page, isMobile());
         confirmationPage = new OrderConfirmationPage(page);
 
         String PRODUCT_URL = getProperty("baseUrl") + "/Crossed-Clubs-Embroidered-Golf-Towel-p28855.prod?sdest=search-op&sdestid=117478940";
