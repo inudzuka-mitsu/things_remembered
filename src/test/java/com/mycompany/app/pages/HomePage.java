@@ -17,7 +17,7 @@ public class HomePage extends BasePage {
     // --- DESKTOP APP LOCATORS ---
     private final String searchBar = "input#searchBox";
     private final String viewCartButton = "div.right.fl a[href*='Cart.aspx']";
-    private final String checkoutBtn = "";
+    private final String checkoutBtn = "div.right.fl a[href*='Checkout.aspx']";
     private final String addedToCartHeader = "#ctl00_mainContent_itemAddedToCart_txtTitle";
     private final String personalizationDetails = "#ctl00_mainContent_itemAddedToCart_txtAddToCartPers, #ctl00_belowHeader_itemUpdatedInfoControl_txtAddToCartPers";
     private final String forHerNavLink = ".shop-recipients-list a:text-is('For Her')";
@@ -28,7 +28,7 @@ public class HomePage extends BasePage {
     private final String mobileAddedToCartHeader = ".block__top-header h2";
     private final String mobilePersonalizationDetails = ".divItemPerContent";
     private final String mobileViewCartButton = "input[value='View Cart >']";
-    private final String mobileCheckoutBtn = "";
+    private final String mobileCheckoutBtn = "input[value=\"Checkout >\"]";
 
     public void typeProduct(String productName) {
        String locator = isMobile ? mobileSearchBar : searchBar;
@@ -53,8 +53,11 @@ public class HomePage extends BasePage {
     }
 
     public void clickCheckout() {
-        String locator = isMobile ? mobileCheckoutBtn : checkoutBtn;
-        page.locator(locator).first().click(new Locator.ClickOptions().setForce(true));
+        if (isMobile) {
+           page.locator("div.block__cart-item button.begin-checkout").click(new Locator.ClickOptions().setForce(true));
+        } else {
+          page.locator(checkoutBtn).first().click(new Locator.ClickOptions().setForce(true));
+        }
     }
 
     public void validateAddedToCartVisible() {
