@@ -30,12 +30,9 @@ public class PhotoUploadTests extends TestBase {
 
         String PRODUCT_URL = getProperty("baseUrl") + "/Custom-Photo-Golf-Towel-i68313.item?productid=25113&sdest=Search&sdestid=181406962";
         String photoPath = System.getProperty("user.dir") + "/src/test/resources/lake.jpg";
-        
-        page.navigate(getProperty("baseUrl"));
-        
-        stagingLoginPage.closePopUp();
 
         page.navigate(PRODUCT_URL);
+         stagingLoginPage.closePopUp();
         productPage.clickPersonalizeBtn();
         personalizeModal.uploadPhoto(photoPath);
         personalizeModal.checkPersonalizationCorrect();

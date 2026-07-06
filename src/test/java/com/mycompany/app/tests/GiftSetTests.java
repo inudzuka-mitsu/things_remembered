@@ -15,8 +15,7 @@ import com.mycompany.app.pages.login.StagingLoginPage;
 import com.mycompany.app.pages.modals_popups.Header;
 import com.mycompany.app.pages.modals_popups.PersonalizeItemModal;
 
-// This test is configured for TR desktop (stg and prod)
-
+// This test is configured for TR desktop (stg and prod), iPhone 13 Pro Max, Samsung Galaxy A52
 public class GiftSetTests extends TestBase {
 
     private StagingLoginPage stagingLoginPage;
@@ -55,36 +54,49 @@ public class GiftSetTests extends TestBase {
 
         page.navigate(getProperty("baseUrl") + PRODUCT_SLUG);
         productPage.clickPersonalizeBtn();
-    
-        personalizeModal.fillInitialAndContinue("T", "Block"); 
-        personalizeModal.fillInitialAndContinue("M", "Block"); 
-        personalizeModal.fillInitialAndContinue("K", "Script"); 
-        personalizeModal.fillInitialAndContinue("K", "Block"); 
-        personalizeModal.fillInitialAndContinue("L", "Script"); 
 
-        personalizeModal.selectCustomDropdown("Choose Pattern", "Stripe");
-        page.waitForTimeout(2000);
-        personalizeModal.selectCustomDropdown("Choose Pattern Color", "Linen");
-         page.waitForTimeout(2000);
-        personalizeModal.selectCustomDropdown("Choose Background Color", "Ivory");
-         page.waitForTimeout(2000);
-        personalizeModal.selectCustomDropdown("Choose Text Color", "Black");
-         page.waitForTimeout(2000);
-        personalizeModal.selectCustomDropdown("Choose Text Box Color", "Brown");
-         page.waitForTimeout(2000);
+        personalizeModal.fillInitialAndContinue("T", "Block");
+        personalizeModal.fillInitialAndContinue("M", "Block");
+        personalizeModal.fillInitialAndContinue("K", "Script");
+        personalizeModal.fillInitialAndContinue("K", "Block");
+        personalizeModal.fillInitialAndContinue("L", "Script");
 
-         personalizeModal.fillMultiLinePersonalization(PERSONALIZATION_MSG);
-        page.waitForTimeout(2000);
-
+        if (isMobile()) {
+            personalizeModal.selectCustomDropdown("Choose Pattern", "Stripe");
+            page.waitForTimeout(2000);
+            personalizeModal.selectCustomDropdown("Choose Pattern Color", "Linen");
+            page.waitForTimeout(2000);
+            personalizeModal.fillMultiLinePersonalization(PERSONALIZATION_MSG);
+            page.waitForTimeout(2000);
+            personalizeModal.selectCustomDropdown("Choose Background Color", "Ivory");
+            page.waitForTimeout(2000);
+            personalizeModal.selectCustomDropdown("Choose Text Color", "Black");
+            page.waitForTimeout(2000);
+            personalizeModal.selectCustomDropdown("Choose Text Box Color", "Brown");
+            page.waitForTimeout(2000);
+        } else {
+            personalizeModal.selectCustomDropdownDesktop("Choose Pattern", "Stripe");
+            page.waitForTimeout(2000);
+            personalizeModal.selectCustomDropdownDesktop("Choose Pattern Color", "Linen");
+            page.waitForTimeout(2000);
+            personalizeModal.fillMultiLinePersonalization(PERSONALIZATION_MSG);
+            page.waitForTimeout(2000);
+            personalizeModal.selectCustomDropdownDesktop("Choose Background Color", "Ivory");
+            page.waitForTimeout(2000);
+            personalizeModal.selectCustomDropdownDesktop("Choose Text Color", "Black");
+            page.waitForTimeout(2000);
+            personalizeModal.selectCustomDropdownDesktop("Choose Text Box Color", "Brown");
+            page.waitForTimeout(2000);
+        }
 
         personalizeModal.clickContinue();
 
         personalizeModal.enterPersonalizationMessage(PERSONALIZATION_MSG);
         personalizeModal.clickContinue();
-                    
+
         personalizeModal.checkPersonalizationCorrect();
         personalizeModal.clickAddToCart();
-    
+
         homePage.clickViewCart();
 
         cartPage.clickSaveForLaterSpecProd(PRODUCT_NAME);
@@ -99,11 +111,13 @@ public class GiftSetTests extends TestBase {
 
         cartPage.clickSaveForLaterSpecProd(PRODUCT_NAME);
 
-        if (!isMobile()) { cartPage.validateEmptyCartAndSavedMessage();}
+        if (!isMobile()) {
+            cartPage.validateEmptyCartAndSavedMessage();
+        }
         cartPage.validateProductInSavedForLaterSpecProd(PRODUCT_NAME);
 
         cartPage.clickMoveToCartSpecProd(PRODUCT_NAME);
         page.waitForTimeout(7000);
         cartPage.validateProductAddedToCart(PRODUCT_NAME);
-     }
+    }
 }
