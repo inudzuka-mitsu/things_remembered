@@ -309,26 +309,51 @@ public class PersonalizeItemModal extends BasePage {
     }
 
     public void selectThreadColor(String color) {
+        System.out.println(">>> Selecting Thread Color: " + color);
         Locator dropdown = getLocator(threadColorDropdown).first();
         dropdown.scrollIntoViewIfNeeded();
-        dropdown.click(new Locator.ClickOptions().setForce(true));
+
+        try {
+            dropdown.click(new Locator.ClickOptions().setForce(true));
+        } catch (Exception e) {
+            System.out.println(">>> Native click blocked on dropdown toggle. Forcing JS click...");
+            dropdown.evaluate("node => node.click()");
+        }
 
         String optionLocator = String.format(activeDropdownOptions, color, color);
         Locator colorOption = getLocator(optionLocator).first();
         colorOption.scrollIntoViewIfNeeded();
-        colorOption.click(new Locator.ClickOptions().setForce(true));
+
+        try {
+            colorOption.click(new Locator.ClickOptions().setForce(true));
+        } catch (Exception e) {
+            System.out.println(">>> Native click blocked on color option. Forcing JS click...");
+            colorOption.evaluate("node => node.click()");
+        }
     }
 
     public void selectColor(String color) {
+        System.out.println(">>> Selecting Color: " + color);
         Locator dropdown = getLocator(colorDropdownByLabel).first();
         dropdown.scrollIntoViewIfNeeded();
-        dropdown.click(new Locator.ClickOptions().setForce(true));
+
+        try {
+            dropdown.click(new Locator.ClickOptions().setForce(true));
+        } catch (Exception e) {
+            System.out.println(">>> Native click blocked on dropdown toggle. Forcing JS click...");
+            dropdown.evaluate("node => node.click()");
+        }
 
         String optionLocator = String.format(activeDropdownOptions, color, color);
         Locator colorOption = getLocator(optionLocator).first();
-
         colorOption.scrollIntoViewIfNeeded();
-        colorOption.click(new Locator.ClickOptions().setForce(true));
+
+        try {
+            colorOption.click(new Locator.ClickOptions().setForce(true));
+        } catch (Exception e) {
+            System.out.println(">>> Native click blocked on color option. Forcing JS click...");
+            colorOption.evaluate("node => node.click()");
+        }
     }
 
     public void selectNoGiftBox() {

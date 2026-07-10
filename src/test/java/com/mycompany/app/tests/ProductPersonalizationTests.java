@@ -14,9 +14,7 @@ import com.mycompany.app.pages.modals_popups.AddressModal;
 import com.mycompany.app.pages.modals_popups.CustomizeGiftModal;
 import com.mycompany.app.pages.modals_popups.PersonalizeItemModal;
 
-
 // These tests are configured for TR desktop app (stg and prod), iPhone 13 Pro Max, Samsung Galaxy A52
-
 public class ProductPersonalizationTests extends TestBase {
 
     private StagingLoginPage stagingLoginPage;
@@ -39,7 +37,7 @@ public class ProductPersonalizationTests extends TestBase {
     private final String PERSONALIZATION_TEXT_2 = "QATest_2";
     private final String UPDATED_THREAD_COLOR = "White";
 
-   @Test
+    @Test
     void personalizeItem() {
         stagingLoginPage = new StagingLoginPage(page);
         signInPage = new SignInPage(page, isMobile());
@@ -51,7 +49,6 @@ public class ProductPersonalizationTests extends TestBase {
         shippingPage = new AddressModal(page, isMobile());
         checkoutPage = new CheckoutPage(page, isMobile());
         confirmationPage = new OrderConfirmationPage(page);
-
         String testEmail = getProperty("test_email_2");
         String testPassword = getProperty("test_password_2");
         String couponCode = getProperty("sale_item_coupon_code");
@@ -61,37 +58,24 @@ public class ProductPersonalizationTests extends TestBase {
         String securityCode = getProperty("card_security_code");
         String cardExpMonth = getProperty("card_exp_month");
         String cardExpYear = getProperty("card_exp_year");
-
         String PRODUCT_URL = getProperty("baseUrl") + "/Winter-Wonderland-Personalized-Christmas-Stockings-p30508.prod?sdest=Search&sdestid=181585763";
-
         page.navigate(PRODUCT_URL);
         stagingLoginPage.closePopUp();
-
         page.navigate(PRODUCT_URL);
         productPage.clickPersonalizeBtn();
-
         personalizeModal.fillPersonalizationAndAddToCart(THREAD_COLOR, FONT_STYLE, PERSONALIZATION_TEXT);
         giftBoxModal.clickContinue();
-
         homePage.validateAddedToCartVisible();
         homePage.validatePersonalization(THREAD_COLOR, FONT_STYLE, PERSONALIZATION_TEXT);
         homePage.clickViewCart();
         cartPage.updateQuantityAndVerifyTotal(QUANTITY);
         cartPage.clickProceedToCheckout();
-
         signInPage.signIn(testEmail, testPassword);
-
-        if (!isMobile()) {
-           signInPage.hoverCartAndCheckout();
-        }
-
         shippingPage.selectFirstAddressAndShip();
         shippingPage.clickSaveAndContinue();
-
         checkoutPage.applyCoupon(couponCode);
         checkoutPage.enterPaymentInformation(cardType, cardName, cardNumber, securityCode, cardExpMonth, cardExpYear);
         checkoutPage.placeOrder();
-
         confirmationPage.verifyOrderSuccessMessage();
     }
 
@@ -107,32 +91,22 @@ public class ProductPersonalizationTests extends TestBase {
         shippingPage = new AddressModal(page, isMobile());
         checkoutPage = new CheckoutPage(page, isMobile());
         confirmationPage = new OrderConfirmationPage(page);
-
         String PRODUCT_URL = getProperty("baseUrl") + "/Crossed-Clubs-Embroidered-Golf-Towel-p28855.prod?sdest=search-op&sdestid=117478940";
-
         page.navigate(PRODUCT_URL);
-        
         stagingLoginPage.closePopUp();
-
         productPage.clickPersonalizeBtn();
-
         personalizeModal.enterName(PERSONALIZATION_TEXT_2);
         personalizeModal.selectColor(ORIGINAL_THREAD_COLOR);
         personalizeModal.verifyPreviewImagePersonalization(ORIGINAL_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
         personalizeModal.checkPersonalizationCorrect();
         personalizeModal.clickAddToCart();
-
         homePage.validatePersonalization(ORIGINAL_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
-
         homePage.clickViewCart();
-
         cartPage.clickEdit();
-
         personalizeModal.selectColor(UPDATED_THREAD_COLOR);
         personalizeModal.verifyPreviewImagePersonalization(UPDATED_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
         personalizeModal.checkPersonalizationCorrect();
         personalizeModal.clickAddToCart();
-
         homePage.validatePersonalization(UPDATED_THREAD_COLOR, null, PERSONALIZATION_TEXT_2);
     }
- }
+}
