@@ -20,7 +20,6 @@ import com.mycompany.app.pages.modals_popups.Header;
 import com.mycompany.app.pages.modals_popups.PersonalizeItemModal;
 
 // These tests are configured for TR desktop (stg and prod), BUG ON MOBILE, CAN'T PROCEED NOW
-
 public class ProductDesignTests extends TestBase {
 
     private StagingLoginPage stagingLoginPage;
@@ -50,7 +49,7 @@ public class ProductDesignTests extends TestBase {
         String securityCode = getProperty("card_security_code");
         String cardExpMonth = getProperty("card_exp_month");
         String cardExpYear = getProperty("card_exp_year");
-        
+
         stagingLoginPage = new StagingLoginPage(page);
         productPage = new ProductPage(page, isMobile());
         designToolPage = new DesignToolPage(page);
@@ -72,7 +71,7 @@ public class ProductDesignTests extends TestBase {
         editorPage.clickAddToCart();
 
         popup.handleValidationPopup();
-        
+
         if (isMobile()) {
             header.clickCartIcon();
         }
@@ -80,10 +79,6 @@ public class ProductDesignTests extends TestBase {
         homePage.clickCheckout();
 
         signInPage.signIn(testEmail, testPassword);
-
-        if (!isMobile()) {
-           signInPage.hoverCartAndCheckout();
-        }
 
         shippingPage.selectFirstAddressAndShip();
         shippingPage.clickSaveAndContinue();
@@ -100,7 +95,7 @@ public class ProductDesignTests extends TestBase {
         String PRODUCT_URL = getProperty("baseUrl") + "/Our-Wedding-Chronicle-Personalized-Photo-Book-4x6-Soft-Glossy-i165541.item?productid=59192&sdest=Search&sdestid=181713431";
         String testEmail = getProperty("test_email_2");
         String testPassword = getProperty("test_password_2");
-        
+
         stagingLoginPage = new StagingLoginPage(page);
         productPage = new ProductPage(page, isMobile());
         designToolPage = new DesignToolPage(page);
@@ -129,10 +124,6 @@ public class ProductDesignTests extends TestBase {
         homePage.clickCheckout();
 
         signInPage.signIn(testEmail, testPassword);
-
-        if (!isMobile()) {
-          signInPage.hoverCartAndCheckout();
-        }
 
         String firstSelectedAddress = shippingPage.selectFirstAddressAndReturnText();
         System.out.println(firstSelectedAddress);

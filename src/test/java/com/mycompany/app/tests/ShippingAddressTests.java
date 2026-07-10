@@ -9,10 +9,9 @@ import com.mycompany.app.pages.AddAddressPage;
 import com.mycompany.app.pages.login.SignInPage;
 import com.mycompany.app.pages.modals_popups.AddressModal;
 
-// These tests are configured for TR desktop app (stg and prod), BUG ON MOBILE - STATE IS NOT VISIBLE 
-
+// These tests are configured for TR desktop app (stg and prod), iPhone 13 Pro Max, Samsung Galaxy A52
 public class ShippingAddressTests extends TestBase {
-    
+
     private AddAddressPage addAddressPage;
     private SignInPage signInPage;
     private AccountPage accountPage;
@@ -44,16 +43,16 @@ public class ShippingAddressTests extends TestBase {
         accountPage.clickManageShippingAddress();
 
         shippingPage.clickAddNewAddress();
-        
+
         addAddressPage.fillNewAddressFormAndSubmit(
-            addressNickname,
-            firstName,
-            lastName,
-            phoneNumber,
-            streetAddress,
-            city,
-            state,
-            zipCode
+                addressNickname,
+                firstName,
+                lastName,
+                phoneNumber,
+                streetAddress,
+                city,
+                state,
+                zipCode
         );
         addAddressPage.clickAddAddress();
 
@@ -61,13 +60,13 @@ public class ShippingAddressTests extends TestBase {
 
         page.navigate(getProperty("baseUrl") + "/AddressBook.aspx");
         shippingPage.validateLastAddress(addressNickname,
-            firstName,
-            lastName,
-            phoneNumber,
-            streetAddress,
-            city,
-            state,
-            zipCode);
+                firstName,
+                lastName,
+                phoneNumber,
+                streetAddress,
+                city,
+                state,
+                zipCode);
     }
 
     @Test
@@ -91,23 +90,23 @@ public class ShippingAddressTests extends TestBase {
         String zipCode = "60602";
 
         int addressToEditIndex = 2;
-    
+
         page.navigate(getProperty("baseUrl") + "/Register.aspx?");
-    
+
         signInPage.signIn(testEmail, testPassword);
 
         accountPage.clickManageShippingAddress();
         shippingPage.editAddress(addressToEditIndex);
-        
+
         addAddressPage.fillNewAddressFormAndSubmit(
-            addressNickname,
-            firstName,
-            lastName,
-            phoneNumber,
-            streetAddress,
-            city,
-            state,
-            zipCode
+                addressNickname,
+                firstName,
+                lastName,
+                phoneNumber,
+                streetAddress,
+                city,
+                state,
+                zipCode
         );
         addAddressPage.clickSaveAddress();
 
@@ -116,12 +115,12 @@ public class ShippingAddressTests extends TestBase {
         page.navigate(getProperty("baseUrl") + "/AddressBook.aspx");
 
         shippingPage.validateAddress(addressToEditIndex, addressNickname,
-            firstName,
-            lastName,
-            phoneNumber,
-            streetAddress,
-            city,
-            state,
-            zipCode);
+                firstName,
+                lastName,
+                phoneNumber,
+                streetAddress,
+                city,
+                state,
+                zipCode);
     }
- }
+}
