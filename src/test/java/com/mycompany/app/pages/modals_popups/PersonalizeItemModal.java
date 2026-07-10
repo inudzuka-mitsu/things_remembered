@@ -268,49 +268,35 @@ public class PersonalizeItemModal extends BasePage {
         }
     }
 
+    private Locator getModalElement(String selector) {
+        for (int i = 0; i < 30; i++) {
+            if (page.locator(selector).count() > 0) {
+                return page.locator(selector);
+            }
+            if (page.locator("#personalizationView").count() > 0
+                    && page.frameLocator("#personalizationView").locator(selector).count() > 0) {
+                return page.frameLocator("#personalizationView").locator(selector);
+            }
+            if (page.locator("#pmallmodaliframe").count() > 0
+                    && page.frameLocator("#pmallmodaliframe").locator(selector).count() > 0) {
+                return page.frameLocator("#pmallmodaliframe").locator(selector);
+            }
+            page.waitForTimeout(500);
+        }
+        return page.locator(selector);
+    }
+
     public void uploadPhoto(String filePath) {
-        System.out.println(">>> Getting personalizationView frame handle...");
+        getLocator(uploadPhotoBtn).click();
+        Locator fileInput = getModalElement("#hFinderUploadFile");
+        fileInput.setInputFiles(Paths.get(filePath));
 
-        com.microsoft.playwright.Frame persFrame = page.frames().stream()
-                .filter(f -> "personalizationView".equals(f.name()))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("'personalizationView' frame not found"));
+        Locator canvas = getModalElement("canvas#previewCanvas");
+        canvas.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
 
-        System.out.println(">>> Clicking thumbnail and waiting for FRAME navigation...");
-
-        persFrame.waitForNavigation(
-                new com.microsoft.playwright.Frame.WaitForNavigationOptions().setTimeout(15000),
-                () -> persFrame.locator("div.uploadthumb img, div.uploadthumbnail img")
-                        .first()
-                        .click()
-        );
-
-        System.out.println(">>> Frame navigated to: " + persFrame.url());
-
-        String html = persFrame.content();
-        System.out.println(">>> UPLOAD PAGE HTML (first 5000 chars):");
-        System.out.println(html.substring(0, Math.min(5000, html.length())));
-
-        com.microsoft.playwright.FileChooser chooser = page.waitForFileChooser(
-                () -> persFrame.locator("input[type='file']").first().click()
-        );
-
-        chooser.setFiles(Paths.get(filePath));
-        System.out.println(">>> File set: " + filePath);
-
-        System.out.println(">>> Waiting for crop canvas...");
-        page.frameLocator("iframe#personalizationView")
-                .locator("canvas#previewCanvas")
-                .waitFor(new Locator.WaitForOptions()
-                        .setState(WaitForSelectorState.VISIBLE)
-                        .setTimeout(20000));
-
-        System.out.println(">>> Saving crop...");
-        page.frameLocator("iframe#personalizationView")
-                .locator("a#saveCrop")
-                .click(new Locator.ClickOptions().setForce(true));
-
-        page.waitForTimeout(2000);
+        Locator saveCropBtn = getModalElement("a#saveCrop");
+        saveCropBtn.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        saveCropBtn.click();
     }
 
     public void fillInputByLabel(String labelText, String value) {
@@ -362,6 +348,7 @@ public class PersonalizeItemModal extends BasePage {
     }
 
     public void checkPersonalizationCorrect() {
+        page.waitForTimeout(5000);
         System.out.println(">>> Confirming personalization...");
         Locator confirmLabel = getLocator("label:has-text('The personalization I entered is correct')").first();
 
