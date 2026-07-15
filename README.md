@@ -22,7 +22,7 @@ Before running the tests, ensure you have the following installed:
     mvn clean install -DskipTests
     ```
 
-## 🏃 Running Tests!@34
+## 🏃 Running Tests
 
 ### 1. Default Run (Dev Environment)
 Runs all tests using the default configuration (`src/test/resources/config-stg.properties`).
@@ -65,4 +65,10 @@ open allure-report/index.html
 
 ```bash
 mvn clean test -Denv=stg -Ddevice.name="iPhone 13 Pro Max"
+```
+
+### 7. Run in Edge
+
+```bash
+mvn clean test -Denv=prod -Dbrowser=edge
 ```

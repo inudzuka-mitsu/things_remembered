@@ -21,6 +21,7 @@ import com.microsoft.playwright.Playwright;
 import io.qameta.allure.Allure;
 
 public class TestBase {
+
     protected Playwright playwright;
     protected Browser browser;
     protected BrowserContext context;
@@ -31,17 +32,17 @@ public class TestBase {
 
     static {
         DEVICE_MAP.put("iPhone 13 Pro Max", new Browser.NewContextOptions()
-            .setUserAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1")
-            .setViewportSize(428, 926)
-            .setDeviceScaleFactor(3)
-            .setIsMobile(true)
-            .setHasTouch(true));
+                .setUserAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1")
+                .setViewportSize(428, 926)
+                .setDeviceScaleFactor(3)
+                .setIsMobile(true)
+                .setHasTouch(true));
         DEVICE_MAP.put("Samsung Galaxy A52", new Browser.NewContextOptions()
-            .setUserAgent("Mozilla/5.0 (Linux; Android 12; SM-A525F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Mobile Safari/537.36")
-            .setViewportSize(412, 915)
-            .setDeviceScaleFactor(3)
-            .setIsMobile(true)
-            .setHasTouch(true));
+                .setUserAgent("Mozilla/5.0 (Linux; Android 12; SM-A525F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Mobile Safari/537.36")
+                .setViewportSize(412, 915)
+                .setDeviceScaleFactor(3)
+                .setIsMobile(true)
+                .setHasTouch(true));
     }
 
     @RegisterExtension
@@ -76,38 +77,62 @@ public class TestBase {
     public void setup() throws IOException {
         String env = System.getProperty("env", "stg");
         props = new Properties();
-        if (env == null) env = "stg";
-        
+        if (env == null) {
+            env = "stg";
+        }
+
         FileInputStream ip = new FileInputStream("src/test/resources/config-" + env.toLowerCase() + ".properties");
         props.load(ip);
 
         System.out.println(">>> Starting test on: " + env.toUpperCase());
 
         playwright = Playwright.create();
-        
+
         String headlessVal = getProperty("headless");
         boolean isHeadless = (headlessVal != null) && Boolean.parseBoolean(headlessVal);
 
-        browser = playwright.chromium().launch(
-            new BrowserType.LaunchOptions()
+        BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions()
                 .setHeadless(isHeadless)
-                .setArgs(java.util.List.of("--disable-blink-features=AutomationControlled"))
-        );
+                .setArgs(java.util.List.of("--disable-blink-features=AutomationControlled"));
 
-        String deviceName = getProperty("device.name"); 
+        String browserName = getProperty("browser");
+        if (browserName == null || browserName.trim().isEmpty()) {
+            browserName = "chromium";
+        }
+
+        System.out.println(">>> Launching browser: " + browserName);
+
+        switch (browserName.toLowerCase()) {
+            case "edge":
+                launchOptions.setChannel("msedge");
+                browser = playwright.chromium().launch(launchOptions);
+                break;
+            case "firefox":
+                browser = playwright.firefox().launch(launchOptions);
+                break;
+            case "webkit":
+                browser = playwright.webkit().launch(launchOptions);
+                break;
+            case "chromium":
+            default:
+                browser = playwright.chromium().launch(launchOptions);
+                break;
+        }
+
+        String deviceName = getProperty("device.name");
         Browser.NewContextOptions options;
 
         if (deviceName != null && !deviceName.isEmpty()) {
             System.out.println(">>> Emulating Mobile Device: " + deviceName);
-            
+
             options = DEVICE_MAP.get(deviceName);
-            
+
             if (options == null) {
                 throw new RuntimeException("Device '" + deviceName + "' not defined in TestBase.DEVICE_MAP. Please add it.");
             }
         } else {
             options = new Browser.NewContextOptions()
-                .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36");
+                    .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36");
         }
 
         context = browser.newContext(options);
